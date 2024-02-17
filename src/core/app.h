@@ -37,5 +37,7 @@ class App {
 
   protected:
     App();
+
+  private:
     bool isRunning;
 };
