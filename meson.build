@@ -35,6 +35,12 @@ cloveunit = dependency('clove-unit', version : '2.4.1')
 
 exe = executable('pong',
                 'src/main.cpp',
+                'src/core/app.cpp',
+                'src/core/display_system.cpp',
+                'src/core/rendering_system.cpp',
+                'src/core/text_system.cpp',
+                'src/core/asset_system.cpp',
+                'src/game/game.cpp',
                  install : false,
                  include_directories : ['src'],
                  dependencies : [ sdl2, sdl2_ttf, spdlog, cloveunit, cmath ],

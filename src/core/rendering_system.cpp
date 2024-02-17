@@ -1,4 +1,8 @@
+#include <spdlog/spdlog.h>
+
 #include "rendering_system.h"
+
+static const std::string TAG{"Rendering Sub-system"};
 
 // -----------------------------------------------------------------------------
 // No-op Constructor / Destructor
@@ -12,10 +16,13 @@ RenderingSystem::~RenderingSystem() {}
 // -----------------------------------------------------------------------------
 
 // FIXME: Not Implemented
-void RenderingSystem::initialize(const Config& config) { (void)config; }
+void RenderingSystem::initialize(const Config& config) {
+    (void)config;
+    spdlog::info("Initializing {}.", TAG);
+}
 
 // FIXME: Not Implemented
-void RenderingSystem::terminate() {}
+void RenderingSystem::terminate() { spdlog::info("Terminating {}.", TAG); }
 
 // -----------------------------------------------------------------------------
 // Singleton

@@ -1,4 +1,8 @@
+#include <spdlog/spdlog.h>
+
 #include "text_system.h"
+
+static const std::string TAG{"Text Management Sub-system"};
 
 // -----------------------------------------------------------------------------
 // No-op Constructor / Destructor
@@ -12,10 +16,13 @@ TextSystem::~TextSystem() {}
 // -----------------------------------------------------------------------------
 
 // FIXME: Not Implemented
-void TextSystem::initialize(const Config& config) { (void)config; }
+void TextSystem::initialize(const Config& config) {
+    (void)config;
+    spdlog::info("Initializing {}.", TAG);
+}
 
 // FIXME: Not Implemented
-void TextSystem::terminate() {}
+void TextSystem::terminate() { spdlog::info("Terminating {}.", TAG); }
 
 // -----------------------------------------------------------------------------
 // Singleton
