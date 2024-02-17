@@ -13,7 +13,7 @@ class PongSdl2C(ConanFile):
     requires = (
         "sdl/2.26.5",
         "sdl_ttf/2.20.2",
-        "log.c/cci.20200620",
+        "spdlog/1.13.0",
         "clove-unit/2.4.1",
     )
 
