@@ -21,8 +21,10 @@ class App {
 
     virtual ~App();
 
-    App(App& app)  = delete;
-    App(App&& app) = delete;
+    // Do not support copy/move/assignment.
+    App(App& app)              = delete;
+    App(App&& app)             = delete;
+    App& operator=(const App&) = delete;
 
     void start(const Config& config);
     void stop();
