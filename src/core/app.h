@@ -12,6 +12,9 @@
 
 class App {
   public:
+    /**
+     * Sub-system configuration aggregate.
+     */
     struct Config {
         AssetSystem::Config assetSystemConfig;
         DisplaySystem::Config displaySystemConfig;
