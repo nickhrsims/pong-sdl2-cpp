@@ -4,9 +4,12 @@ int main(void) {
 
     Game game{};
 
-    game.start({.assetSystemConfig{
-
-    }});
+    game.start({
+        .assetSystemConfig{},
+        .displaySystemConfig{},
+        .renderingSystemConfig{},
+        .textSystemConfig{},
+    });
 
     return 0;
 }
