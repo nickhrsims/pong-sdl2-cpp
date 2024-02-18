@@ -25,9 +25,10 @@ class App {
     virtual ~App();
 
     // Do not support copy/move/assignment.
-    App(App& app)              = delete;
-    App(App&& app)             = delete;
-    App& operator=(const App&) = delete;
+    App(App& app)               = delete;
+    App(App&& app)              = delete;
+    App& operator=(const App&)  = delete;
+    App& operator=(const App&&) = delete;
 
     /**
      * Start the `App` instance, executing primary frame/event processing loop.
@@ -48,14 +49,14 @@ class App {
      *
      * Override to describe how to process a single frame.
      */
-    virtual void processFrame(float delta) = 0;
+    virtual void processFrame(const float delta) = 0;
 
     /**
      * Virtual event processor.
      *
      * Override to describe how to process a single event.
      */
-    virtual void processEvent(SDL_Event& event) = 0;
+    virtual void processEvent(const SDL_Event& event) = 0;
 
   protected:
     App();
