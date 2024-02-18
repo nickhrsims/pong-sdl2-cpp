@@ -105,6 +105,6 @@ void App::start(const Config& config) {
 }
 
 void App::stop() {
-    spdlog::info("Stopping application loop");
+    spdlog::info("Stopping application");
     isRunning = false;
 }
