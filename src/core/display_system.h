@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SDL_events.h>
+
 class DisplaySystem {
   public:
     struct Config {
@@ -15,6 +17,8 @@ class DisplaySystem {
 
     void initialize(const Config& config);
     void terminate();
+
+    void processEvent(const SDL_Event& event);
 
   private:
     DisplaySystem();

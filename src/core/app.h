@@ -55,6 +55,9 @@ class App {
      * Virtual event processor.
      *
      * Override to describe how to process a single event.
+     *
+     * Note that only events not handled internally by `App`
+     * are dispatched to this handler.
      */
     virtual void processEvent(const SDL_Event& event) = 0;
 
@@ -62,6 +65,11 @@ class App {
     App();
 
   private:
+    /**
+     * Dispatch events by type to interested sub-systems.
+     */
+    void dispatchEvent(const SDL_Event& event);
+
     /** Internal flag used for control-flow. */
     bool isRunning;
 };

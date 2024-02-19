@@ -1,45 +1,46 @@
-#include <string>
-
 #include <spdlog/spdlog.h>
 
-#include "display_system.h"
+#include "input_system.h"
 
-static const std::string TAG{"Display Sub-system"};
+static const std::string TAG{"Input Sub-system"};
 
 // -----------------------------------------------------------------------------
 // No-op Constructor / Destructor
 // -----------------------------------------------------------------------------
 
-DisplaySystem::DisplaySystem() {}
-DisplaySystem::~DisplaySystem() {}
+InputSystem::InputSystem() {}
+InputSystem::~InputSystem() {}
 
 // -----------------------------------------------------------------------------
 // Initialization / Termination
 // -----------------------------------------------------------------------------
 
 // FIXME: Not Implemented
-void DisplaySystem::initialize(const Config& config) {
+void InputSystem::initialize(const Config& config) {
     (void)config;
     spdlog::info("Initializing {}.", TAG);
 }
 
 // FIXME: Not Implemented
-void DisplaySystem::terminate() { spdlog::info("Terminating {}.", TAG); }
+void InputSystem::terminate() { spdlog::info("Terminating {}.", TAG); }
 
 // -----------------------------------------------------------------------------
 // Singleton
 // -----------------------------------------------------------------------------
 
 // Return singleton.
-DisplaySystem& DisplaySystem::get() {
-    static DisplaySystem instance{};
+InputSystem& InputSystem::get() {
+    static InputSystem instance{};
     return instance;
 }
 
 // -----------------------------------------------------------------------------
-// Event Handling
+// Event Handling + Specialized Input Event Mapping
 // -----------------------------------------------------------------------------
 
-void DisplaySystem::processEvent(const SDL_Event& event) {
-    spdlog::debug("{} received event type: {}", TAG, event.type);
+void handleEvent(const SDL_Event& event) {
+    if (event.type == SDL_KEYDOWN) {
+        SDL_Scancode scancode = event.key.keysym.scancode;
+        InputSystem::get();
+    }
 }

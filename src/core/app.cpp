@@ -65,12 +65,7 @@ void App::start(const Config& config) {
         /** Input Event Processing */
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            this->processEvent(event);
-            // --- Check OS-level quit request
-            if (event.type == SDL_QUIT) {
-                isRunning = false;
-                break;
-            }
+            this->dispatchEvent(event);
         }
 
         // --- Process Frame
@@ -107,4 +102,23 @@ void App::start(const Config& config) {
 void App::stop() {
     spdlog::info("Stopping application");
     isRunning = false;
+}
+
+// -----------------------------------------------------------------------------
+// Event Dispatch
+// -----------------------------------------------------------------------------
+
+void App::dispatchEvent(const SDL_Event& event) {
+    switch (event.type) {
+    case SDL_DISPLAYEVENT:
+    case SDL_WINDOWEVENT:
+        DisplaySystem::get().processEvent(event);
+        break;
+    case SDL_QUIT:
+        stop();
+        break;
+    default:
+        processEvent(event);
+        break;
+    }
 }
