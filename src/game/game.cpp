@@ -3,12 +3,23 @@
 #include <spdlog/spdlog.h>
 
 #include "game.h"
+#include "game/input_system.h"
 
 // -----------------------------------------------------------------------------
 // Constructor / Destructor
 // -----------------------------------------------------------------------------
 
 Game::Game(const App::Config& config) : App{config}, currentState{&startState} {
+
+    // ---------------------------------
+    // Sub-system Intitialization
+    // ---------------------------------
+
+    // --- Input System
+    {
+        InputSystem::Config config;
+        InputSystem::get().initialize(config);
+    }
 
     // ---------------------------------
     // State Transitions
@@ -133,12 +144,21 @@ Game::~Game() {}
 // Frame / Event Processing Dispatch
 // -----------------------------------------------------------------------------
 
-inline void Game::processFrame(const float delta) {
-    currentState->processFrame(delta);
-    stop();
-}
+inline void Game::processFrame(const float delta) { currentState->processFrame(delta); }
 inline void Game::processEvent(const SDL_Event& event) {
-    currentState->processEvent(event);
+    switch (event.type) {
+
+    case SDL_KEYDOWN:
+        InputSystem::get().handleKeyDownEvent(event.key);
+        break;
+    case SDL_MOUSEBUTTONDOWN:
+        InputSystem::get().handleMouseButtonDownEvent(event.button);
+        break;
+
+    default:
+        currentState->processEvent(event);
+        break;
+    }
 }
 
 // -----------------------------------------------------------------------------
