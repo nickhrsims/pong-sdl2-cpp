@@ -91,6 +91,7 @@ class InputSystem {
 
     void initialize(const Config& config);
     void terminate();
+    void reinitialize(const Config& config);
 
     void handleKeyDownEvent(const SDL_KeyboardEvent& event);
     void handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event);

@@ -53,6 +53,11 @@ void InputSystem::terminate() {
     std::fill_n(buttonToActionMap, mouseButtonCount, Action::none);
 }
 
+void InputSystem::reinitialize(const Config& config) {
+    terminate();
+    initialize(config);
+}
+
 // -----------------------------------------------------------------------------
 // Singleton
 // -----------------------------------------------------------------------------
