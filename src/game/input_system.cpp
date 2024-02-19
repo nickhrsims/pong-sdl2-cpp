@@ -83,7 +83,7 @@ void InputSystem::handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event) 
 }
 
 // -----------------------------------------------------------------------------
-// Specialized Config Methods
+// Config :: Input Action Configuration
 // -----------------------------------------------------------------------------
 
 void InputSystem::Config::setKeyboardKeyDownAction(SDL_Scancode scancode,
