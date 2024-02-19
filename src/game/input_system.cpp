@@ -96,7 +96,6 @@ void InputSystem::Config::setMouseButtonDownAction(uint8_t button, Action action
 // Action Queries
 // -----------------------------------------------------------------------------
 
-// HACK: The extra maps are redundant, just save the ActionDescription map.
 bool InputSystem::isActionPressed(Action action) {
     switch (actionToInputTypeMap[action]) {
     case InputType::keyboard:
