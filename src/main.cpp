@@ -1,15 +1,26 @@
+#include "spdlog/common.h"
+#include <spdlog/spdlog.h>
+
 #include "game/game.h"
 
 int main(void) {
 
-    Game game{};
+    spdlog::set_level(spdlog::level::debug);
 
-    game.start({
+    Game game{{
         .assetSystemConfig{},
-        .displaySystemConfig{},
+        .displaySystemConfig{
+            .windowTitle     = "Pong SDL2 C++",
+            .windowPositionX = 256,
+            .windowPositionY = 256,
+            .windowWidth     = 256,
+            .windowHeight    = 256,
+        },
         .renderingSystemConfig{},
         .textSystemConfig{},
-    });
+    }};
+
+    game.start();
 
     return 0;
 }
