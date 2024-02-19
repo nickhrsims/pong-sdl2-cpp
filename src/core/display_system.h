@@ -1,10 +1,13 @@
 #pragma once
 
+#include <string>
+
 #include <SDL_events.h>
 
 class DisplaySystem {
   public:
     struct Config {
+        std::string windowTitle;
         unsigned int windowPositionX;
         unsigned int windowPositionY;
         unsigned int windowWidth;
