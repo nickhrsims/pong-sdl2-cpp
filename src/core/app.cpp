@@ -10,22 +10,28 @@
 // No-Op Construction/Destruction
 // -----------------------------------------------------------------------------
 
-App::App() {}
-App::~App() {}
-
-// -----------------------------------------------------------------------------
-// Start / Stop
-// -----------------------------------------------------------------------------
-
-void App::start(const Config& config) {
-
-    spdlog::info("Starting application");
-
+App::App(const Config& config) {
     // --- Initialize Sub-systems
     AssetSystem::get().initialize(config.assetSystemConfig);
     DisplaySystem::get().initialize(config.displaySystemConfig);
     RenderingSystem::get().initialize(config.renderingSystemConfig);
     TextSystem::get().initialize(config.textSystemConfig);
+}
+App::~App() {
+    // --- Termiante Sub-systems
+    TextSystem::get().terminate();
+    RenderingSystem::get().terminate();
+    DisplaySystem::get().terminate();
+    AssetSystem::get().terminate();
+}
+
+// -----------------------------------------------------------------------------
+// Start / Stop
+// -----------------------------------------------------------------------------
+
+void App::start() {
+
+    spdlog::info("Application started");
 
     // --- Execute Simulation Loop
 
@@ -49,8 +55,6 @@ void App::start(const Config& config) {
 
     /** Time between frames. Measured in seconds. */
     float delta = 0;
-
-    spdlog::info("Entering primary processing loop");
 
     // --- Application Loop
     while (isRunning) {
@@ -90,17 +94,11 @@ void App::start(const Config& config) {
         SDL_Delay(frameDelayMs);
     }
 
-    spdlog::info("Exiting primary processing loop");
-
-    // --- Termiante Sub-systems
-    TextSystem::get().terminate();
-    RenderingSystem::get().terminate();
-    DisplaySystem::get().terminate();
-    AssetSystem::get().terminate();
+    spdlog::info("Application stopped");
 }
 
 void App::stop() {
-    spdlog::info("Stopping application");
+    spdlog::info("Stopping application...");
     isRunning = false;
 }
 

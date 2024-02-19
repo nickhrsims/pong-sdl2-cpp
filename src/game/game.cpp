@@ -8,7 +8,8 @@
 // Constructor / Destructor
 // -----------------------------------------------------------------------------
 
-Game::Game() : App{}, currentState{&startState} {
+Game::Game(const App::Config& config) : App{config}, currentState{&startState} {
+
     // ---------------------------------
     // State Transitions
     // ---------------------------------

@@ -30,7 +30,7 @@ class Game : public App {
 
     friend State;
 
-    Game();
+    Game(const App::Config& config);
     ~Game() override;
 
     Game(Game& game)              = delete;

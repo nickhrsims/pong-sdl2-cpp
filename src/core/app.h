@@ -34,7 +34,7 @@ class App {
      * Start the `App` instance, executing primary frame/event processing loop.
      * \sa App::stop
      */
-    void start(const Config& config);
+    void start();
 
     /**
      * Stop a previously started (and still running) `App`.
@@ -62,7 +62,7 @@ class App {
     virtual void processEvent(const SDL_Event& event) = 0;
 
   protected:
-    App();
+    App(const Config& config);
 
   private:
     /**
