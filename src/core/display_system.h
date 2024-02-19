@@ -6,6 +6,8 @@
 
 class DisplaySystem {
   public:
+    friend class RenderingSystem;
+
     struct Config {
         std::string windowTitle;
         unsigned int windowPositionX;
@@ -24,6 +26,8 @@ class DisplaySystem {
     void processEvent(const SDL_Event& event);
 
   private:
+    SDL_Window* window;
+
     DisplaySystem();
     DisplaySystem(DisplaySystem&)                  = delete;
     DisplaySystem(DisplaySystem&&)                 = delete;

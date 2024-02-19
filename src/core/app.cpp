@@ -23,6 +23,8 @@ App::~App() {
     RenderingSystem::get().terminate();
     DisplaySystem::get().terminate();
     AssetSystem::get().terminate();
+
+    SDL_Quit();
 }
 
 // -----------------------------------------------------------------------------
