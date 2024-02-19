@@ -15,7 +15,8 @@ class RenderingSystem {
 
   private:
     RenderingSystem();
-    RenderingSystem(const RenderingSystem&)            = delete;
-    RenderingSystem(const RenderingSystem&&)           = delete;
-    RenderingSystem& operator=(const RenderingSystem&) = delete;
+    RenderingSystem(const RenderingSystem&)             = delete;
+    RenderingSystem(const RenderingSystem&&)            = delete;
+    RenderingSystem& operator=(const RenderingSystem&)  = delete;
+    RenderingSystem& operator=(const RenderingSystem&&) = delete;
 };
