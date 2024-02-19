@@ -114,5 +114,10 @@ bool InputSystem::isKeyboardKeyDownActionPressed(Action action) {
     return keyboardState[scancode];
 }
 
-// TODO:
-bool InputSystem::isMouseButtonDownActionPressed(Action action) { return false; }
+bool InputSystem::isMouseButtonDownActionPressed(Action action) {
+    uint8_t button{actionToMouseButtonMap[action]};
+    const uint32_t mouseState = SDL_GetMouseState(NULL, NULL);
+    spdlog::debug("MouseState({}) | MouseButton({}) | MouseButtonMasked({})",
+                  mouseState, button, SDL_BUTTON(button));
+    return SDL_BUTTON(button) & mouseState;
+}
