@@ -30,7 +30,6 @@ void DisplaySystem::initialize(const Config& config) {
     }
 }
 
-// FIXME: Not Implemented
 void DisplaySystem::terminate() {
     spdlog::info("Terminating {}.", TAG);
     SDL_DestroyWindow(window);
