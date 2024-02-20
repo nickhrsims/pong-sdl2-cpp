@@ -21,6 +21,12 @@ class Entity {
             right,
             bottom,
         };
+
+        const Vector4 operator-(const AABB& rhs) const;
+        const Vector4 minkowskiDifference(const AABB& other) const;
+
+        bool hasPoint(int x, int y) const;
+        Edge getIntersectingEdge(const AABB& other) const;
     };
 
     virtual void update(float delta) = 0;

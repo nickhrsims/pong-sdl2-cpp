@@ -39,3 +39,62 @@ void Entity::move(float delta) {
 }
 
 Vector4 Entity::getRect() { return aabb; }
+
+// -----------------------------------------------------------------------------
+// AABB
+// -----------------------------------------------------------------------------
+
+const Vector4 Entity::AABB::minkowskiDifference(const AABB& other) const {
+    return Vector4{
+        x - (other.x + other.w),
+        y - (other.y + other.h),
+        w + other.w,
+        h + other.h,
+    };
+}
+
+const Vector4 Entity::AABB::operator-(const AABB& rhs) const {
+    return minkowskiDifference(rhs);
+}
+
+bool Entity::AABB::hasPoint(int x, int y) const {
+    int left   = x;
+    int top    = y;
+    int right  = x + w;
+    int bottom = y + h;
+
+    return (left < x && x < right && top < y && y < bottom);
+}
+
+Entity::AABB::Edge Entity::AABB::getIntersectingEdge(const Entity::AABB& other) const {
+    AABB result{minkowskiDifference(other)};
+
+    // If the minkowski box surrounds the origin, then a collision has occured.
+    bool isIntersecting{result.hasPoint(0, 0)};
+
+    int left   = std::abs(result.x);
+    int top    = std::abs(result.y);
+    int right  = std::abs(result.x + result.w);
+    int bottom = std::abs(result.y + result.h);
+
+    if (isIntersecting) {
+        int closestEdge = left;
+        if (right < closestEdge)
+            closestEdge = right;
+        if (top < closestEdge)
+            closestEdge = top;
+        if (bottom < closestEdge)
+            closestEdge = bottom;
+
+        if (closestEdge == left)
+            return Edge::left;
+        if (closestEdge == right)
+            return Edge::right;
+        if (closestEdge == top)
+            return Edge::top;
+        if (closestEdge == bottom)
+            return Edge::bottom;
+    }
+
+    return Edge::none; // Not intersecting
+}
