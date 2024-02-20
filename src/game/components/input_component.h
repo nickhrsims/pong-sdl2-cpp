@@ -7,7 +7,7 @@ class InputComponent {
   public:
     InputComponent(Entity* entity);
 
-    void update(float delta);
+    void update(float delta) const;
 
   private:
     Entity* const entity;

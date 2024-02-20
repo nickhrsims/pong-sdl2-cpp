@@ -9,9 +9,9 @@ class Paddle : public Entity {
     Paddle();
 
     void update(float delta) override;
-    void draw() override;
+    void draw() const override;
 
   private:
-    InputComponent inputComponent;
-    DirectRenderComponent renderComponent;
+    const InputComponent inputComponent;
+    const DirectRenderComponent renderComponent;
 };

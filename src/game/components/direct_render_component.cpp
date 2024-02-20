@@ -9,7 +9,7 @@ DirectRenderComponent::DirectRenderComponent(Entity* entity) : entity{entity} {
 DirectRenderComponent::DirectRenderComponent(Entity* entity, SDL_Color& color)
     : entity{entity}, color{color} {}
 
-void DirectRenderComponent::draw() {
+void DirectRenderComponent::draw() const {
     SDL_Rect rect{entity->getRect()};
     RenderingSystem::get().drawRect(rect, color);
 }

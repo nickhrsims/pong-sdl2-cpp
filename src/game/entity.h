@@ -24,7 +24,7 @@ class Entity {
     };
 
     virtual void update(float delta) = 0;
-    virtual void draw()              = 0;
+    virtual void draw() const        = 0;
 
     // ---------------------------------
     // Position

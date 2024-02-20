@@ -6,7 +6,7 @@ class DirectRenderComponent {
     DirectRenderComponent(Entity* entity);
     DirectRenderComponent(Entity* entity, SDL_Color& color);
 
-    void draw();
+    void draw() const;
 
   private:
     Entity* const entity;

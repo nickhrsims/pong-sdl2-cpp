@@ -5,4 +5,5 @@ void Paddle::update(float delta) {
     inputComponent.update(delta);
     move(delta);
 }
-void Paddle::draw() { renderComponent.draw(); }
+
+void Paddle::draw() const { renderComponent.draw(); }

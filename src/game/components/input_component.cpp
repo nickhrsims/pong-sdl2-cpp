@@ -4,7 +4,7 @@ static const int SPEED = 400;
 
 InputComponent::InputComponent(Entity* entity) : entity{entity} {}
 
-void InputComponent::update(float delta) {
+void InputComponent::update(float delta) const {
     (void)delta;
     using Action = InputSystem::Action;
     InputSystem& input{InputSystem::get()};
