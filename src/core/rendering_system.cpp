@@ -16,14 +16,12 @@ RenderingSystem::~RenderingSystem() {}
 // Initialization / Termination
 // -----------------------------------------------------------------------------
 
-// FIXME: Not Implemented
 void RenderingSystem::initialize(const Config& config) {
     (void)config;
     spdlog::info("Initializing {}.", TAG);
     SDL_CreateRenderer(DisplaySystem::get().window, 0, 0);
 }
 
-// FIXME: Not Implemented
 void RenderingSystem::terminate() {
     spdlog::info("Terminating {}.", TAG);
     SDL_DestroyRenderer(renderer);
