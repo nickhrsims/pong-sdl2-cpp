@@ -72,14 +72,10 @@ InputSystem& InputSystem::get() {
 // Action Event Handling + Propogation
 // -----------------------------------------------------------------------------
 
-void InputSystem::handleKeyDownEvent(const SDL_KeyboardEvent& event) {
-    (void)event;
-    spdlog::debug("{} received Keyboard/KeyDown event", TAG);
-}
+void InputSystem::handleKeyDownEvent(const SDL_KeyboardEvent& event) { (void)event; }
 
 void InputSystem::handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event) {
     (void)event;
-    spdlog::debug("{} received Mouse/Button event", TAG);
 }
 
 // -----------------------------------------------------------------------------
