@@ -32,3 +32,8 @@ void Entity::setVelocity(int vx, int vy) {
     velocity.x = vx;
     velocity.y = vy;
 }
+
+void Entity::move(float delta) {
+    aabb.x += velocity.x * delta;
+    aabb.y += velocity.y * delta;
+}

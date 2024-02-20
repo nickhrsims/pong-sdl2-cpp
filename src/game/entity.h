@@ -56,7 +56,7 @@ class Entity {
     const Vector2 getVelocity();
     void setVelocity(int vx, int vy);
 
-    void move();
+    void move(float delta);
 
   private:
     Velocity velocity{0, 0};
