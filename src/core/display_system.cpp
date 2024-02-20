@@ -50,6 +50,4 @@ DisplaySystem& DisplaySystem::get() {
 // Event Handling
 // -----------------------------------------------------------------------------
 
-void DisplaySystem::processEvent(const SDL_Event& event) {
-    spdlog::debug("{} received event type: {}", TAG, event.type);
-}
+void DisplaySystem::processEvent(const SDL_Event& event) { (void)event; }
