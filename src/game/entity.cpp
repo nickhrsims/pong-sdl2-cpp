@@ -38,14 +38,14 @@ void Entity::move(float delta) {
     aabb.y += velocity.y * delta;
 }
 
-Vector4 Entity::getRect() { return aabb; }
+Rect Entity::getRect() { return aabb; }
 
 // -----------------------------------------------------------------------------
 // AABB
 // -----------------------------------------------------------------------------
 
-const Vector4 Entity::AABB::minkowskiDifference(const AABB& other) const {
-    return Vector4{
+const Rect Entity::AABB::minkowskiDifference(const AABB& other) const {
+    return Rect{
         x - (other.x + other.w),
         y - (other.y + other.h),
         w + other.w,
@@ -53,7 +53,7 @@ const Vector4 Entity::AABB::minkowskiDifference(const AABB& other) const {
     };
 }
 
-const Vector4 Entity::AABB::operator-(const AABB& rhs) const {
+const Rect Entity::AABB::operator-(const AABB& rhs) const {
     return minkowskiDifference(rhs);
 }
 

@@ -7,13 +7,13 @@ struct Vector2 {
     int y;
 };
 
-struct Vector4 : SDL_Rect {};
+struct Rect : SDL_Rect {};
 
 class Entity {
   public:
     struct Velocity : Vector2 {};
 
-    struct AABB : Vector4 {
+    struct AABB : Rect {
         enum class Edge {
             none,
             left,
@@ -22,8 +22,8 @@ class Entity {
             bottom,
         };
 
-        const Vector4 operator-(const AABB& rhs) const;
-        const Vector4 minkowskiDifference(const AABB& other) const;
+        const Rect operator-(const AABB& rhs) const;
+        const Rect minkowskiDifference(const AABB& other) const;
 
         bool hasPoint(int x, int y) const;
         Edge getIntersectingEdge(const AABB& other) const;
@@ -71,7 +71,7 @@ class Entity {
     // Rect Access
     // ---------------------------------
 
-    Vector4 getRect();
+    Rect getRect();
 
   private:
     Velocity velocity{0, 0};
