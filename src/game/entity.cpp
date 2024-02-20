@@ -37,3 +37,5 @@ void Entity::move(float delta) {
     aabb.x += velocity.x * delta;
     aabb.y += velocity.y * delta;
 }
+
+Vector4 Entity::getRect() { return aabb; }

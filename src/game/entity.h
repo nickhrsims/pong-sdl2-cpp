@@ -61,6 +61,12 @@ class Entity {
 
     void move(float delta);
 
+    // ---------------------------------
+    // Rect Access
+    // ---------------------------------
+
+    Vector4 getRect();
+
   private:
     Velocity velocity{0, 0};
     AABB aabb{0, 0, 0, 0};
