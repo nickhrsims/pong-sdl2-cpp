@@ -25,6 +25,9 @@ void DisplaySystem::initialize(const Config& config) {
     window = SDL_CreateWindow(config.windowTitle.c_str(), config.windowPositionX,
                               config.windowPositionY, config.windowWidth,
                               config.windowHeight, 0);
+    if (!window) {
+        spdlog::error("{} Error: Failed to create window!");
+    }
 }
 
 // FIXME: Not Implemented

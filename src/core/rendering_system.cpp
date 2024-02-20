@@ -19,7 +19,14 @@ RenderingSystem::~RenderingSystem() {}
 void RenderingSystem::initialize(const Config& config) {
     (void)config;
     spdlog::info("Initializing {}.", TAG);
-    SDL_CreateRenderer(DisplaySystem::get().window, 0, 0);
+    if (!DisplaySystem::get().window) {
+        spdlog::error("{} Error: Window required by renderer is null!", TAG);
+    }
+    renderer = SDL_CreateRenderer(DisplaySystem::get().window, 0, 0);
+    if (!renderer) {
+        spdlog::error("{} Error: Renderer create failed!", TAG);
+        abort();
+    }
 }
 
 void RenderingSystem::terminate() {
