@@ -43,3 +43,22 @@ RenderingSystem& RenderingSystem::get() {
     static RenderingSystem instance{};
     return instance;
 }
+
+// -----------------------------------------------------------------------------
+// Clear + Show
+// -----------------------------------------------------------------------------
+
+void RenderingSystem::clear() {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderClear(renderer);
+}
+void RenderingSystem::show() { SDL_RenderPresent(renderer); }
+
+// -----------------------------------------------------------------------------
+// Draw
+// -----------------------------------------------------------------------------
+
+void RenderingSystem::drawRect(SDL_Rect& rect, SDL_Color& color) {
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderFillRect(renderer, &rect);
+}

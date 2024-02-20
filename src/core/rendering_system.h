@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SDL_rect.h"
 #include "SDL_render.h"
 
 #include "display_system.h"
@@ -14,6 +15,10 @@ class RenderingSystem {
 
     void initialize(const Config& config);
     void terminate();
+
+    void clear();
+    void show();
+    void drawRect(SDL_Rect& rect, SDL_Color& color);
 
   private:
     SDL_Renderer* renderer;
