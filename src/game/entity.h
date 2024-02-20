@@ -7,11 +7,13 @@ struct Vector2 {
     int y;
 };
 
+struct Vector4 : SDL_Rect {};
+
 class Entity {
   public:
     struct Velocity : Vector2 {};
 
-    struct AABB : SDL_Rect {
+    struct AABB : Vector4 {
         enum class Edge {
             none,
             left,
