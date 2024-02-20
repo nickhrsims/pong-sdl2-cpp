@@ -3,16 +3,20 @@
 #include "rendering_system.h"
 
 class TextSystem {
+    friend class App;
+
   public:
     struct Config {};
     ~TextSystem();
 
-    static TextSystem& get();
+    static const TextSystem& get();
 
     void initialize(const Config& config);
     void terminate();
 
   private:
+    static TextSystem& getMutable();
+
     TextSystem();
     TextSystem(const TextSystem& rhs)        = delete;
     TextSystem(const TextSystem&& rhs)       = delete;

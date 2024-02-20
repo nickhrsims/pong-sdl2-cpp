@@ -12,17 +12,17 @@
 
 App::App(const Config& config) {
     // --- Initialize Sub-systems
-    AssetSystem::get().initialize(config.assetSystemConfig);
-    DisplaySystem::get().initialize(config.displaySystemConfig);
-    RenderingSystem::get().initialize(config.renderingSystemConfig);
-    TextSystem::get().initialize(config.textSystemConfig);
+    AssetSystem::getMutable().initialize(config.assetSystemConfig);
+    DisplaySystem::getMutable().initialize(config.displaySystemConfig);
+    RenderingSystem::getMutable().initialize(config.renderingSystemConfig);
+    TextSystem::getMutable().initialize(config.textSystemConfig);
 }
 App::~App() {
     // --- Termiante Sub-systems
-    TextSystem::get().terminate();
-    RenderingSystem::get().terminate();
-    DisplaySystem::get().terminate();
-    AssetSystem::get().terminate();
+    TextSystem::getMutable().terminate();
+    RenderingSystem::getMutable().terminate();
+    DisplaySystem::getMutable().terminate();
+    AssetSystem::getMutable().terminate();
 
     SDL_Quit();
 }
@@ -112,7 +112,7 @@ void App::dispatchEvent(const SDL_Event& event) {
     switch (event.type) {
     case SDL_DISPLAYEVENT:
     case SDL_WINDOWEVENT:
-        DisplaySystem::get().processEvent(event);
+        DisplaySystem::getMutable().processEvent(event);
         break;
     case SDL_QUIT:
         stop();

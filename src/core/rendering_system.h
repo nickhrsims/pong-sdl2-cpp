@@ -6,22 +6,27 @@
 #include "display_system.h"
 
 class RenderingSystem {
+    friend class App;
+
   public:
     struct Config {};
 
     ~RenderingSystem();
 
-    static RenderingSystem& get();
+    static const RenderingSystem& get();
 
     void initialize(const Config& config);
     void terminate();
 
-    void clear();
-    void show();
-    void drawRect(SDL_Rect& rect, SDL_Color& color);
+    void clear() const;
+    void show() const;
+    void drawRect(const SDL_Rect& rect, const SDL_Color& color) const;
 
   private:
     SDL_Renderer* renderer;
+
+    static RenderingSystem& getMutable();
+
     RenderingSystem();
     RenderingSystem(const RenderingSystem&)             = delete;
     RenderingSystem(const RenderingSystem&&)            = delete;

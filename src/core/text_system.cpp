@@ -29,7 +29,9 @@ void TextSystem::terminate() { spdlog::info("Terminating {}.", TAG); }
 // -----------------------------------------------------------------------------
 
 // Return singleton.
-TextSystem& TextSystem::get() {
+TextSystem& TextSystem::getMutable() {
     static TextSystem instance{};
     return instance;
 }
+
+const TextSystem& TextSystem::get() { return getMutable(); }

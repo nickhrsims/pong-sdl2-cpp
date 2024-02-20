@@ -30,7 +30,9 @@ void AssetSystem::terminate() { spdlog::info("Terminating {}.", TAG); }
 // -----------------------------------------------------------------------------
 
 // Return singleton.
-AssetSystem& AssetSystem::get() {
+AssetSystem& AssetSystem::getMutable() {
     static AssetSystem instance{};
     return instance;
 }
+
+const AssetSystem& AssetSystem::get() { return getMutable(); }

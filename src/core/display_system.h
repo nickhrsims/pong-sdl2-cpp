@@ -5,6 +5,8 @@
 #include <SDL_events.h>
 
 class DisplaySystem {
+    friend class App;
+
   public:
     friend class RenderingSystem;
 
@@ -18,7 +20,7 @@ class DisplaySystem {
 
     ~DisplaySystem();
 
-    static DisplaySystem& get();
+    static const DisplaySystem& get();
 
     void initialize(const Config& config);
     void terminate();
@@ -27,6 +29,8 @@ class DisplaySystem {
 
   private:
     SDL_Window* window;
+
+    static DisplaySystem& getMutable();
 
     DisplaySystem();
     DisplaySystem(DisplaySystem&)                  = delete;

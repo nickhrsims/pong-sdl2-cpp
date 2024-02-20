@@ -41,10 +41,12 @@ void DisplaySystem::terminate() {
 // -----------------------------------------------------------------------------
 
 // Return singleton.
-DisplaySystem& DisplaySystem::get() {
+DisplaySystem& DisplaySystem::getMutable() {
     static DisplaySystem instance{};
     return instance;
 }
+
+const DisplaySystem& DisplaySystem::get() { return getMutable(); }
 
 // -----------------------------------------------------------------------------
 // Event Handling

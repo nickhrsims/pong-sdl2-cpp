@@ -39,26 +39,28 @@ void RenderingSystem::terminate() {
 // -----------------------------------------------------------------------------
 
 // Return singleton.
-RenderingSystem& RenderingSystem::get() {
+RenderingSystem& RenderingSystem::getMutable() {
     static RenderingSystem instance{};
     return instance;
 }
+
+const RenderingSystem& RenderingSystem::get() { return getMutable(); }
 
 // -----------------------------------------------------------------------------
 // Clear + Show
 // -----------------------------------------------------------------------------
 
-void RenderingSystem::clear() {
+void RenderingSystem::clear() const {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
 }
-void RenderingSystem::show() { SDL_RenderPresent(renderer); }
+void RenderingSystem::show() const { SDL_RenderPresent(renderer); }
 
 // -----------------------------------------------------------------------------
 // Draw
 // -----------------------------------------------------------------------------
 
-void RenderingSystem::drawRect(SDL_Rect& rect, SDL_Color& color) {
+void RenderingSystem::drawRect(const SDL_Rect& rect, const SDL_Color& color) const {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(renderer, &rect);
 }
