@@ -1,15 +1,7 @@
 #pragma once
 
-#include <SDL_rect.h>
-
 #include "core/vector2.h"
-
-/**
- * A simple wrapper around SDL_Rect.
- * Doesn't change properties, just ensures the compiler does the right thing
- * in the right circumstances.
- */
-struct Rect : SDL_Rect {};
+#include "rect.h"
 
 class Entity {
   public:
@@ -19,49 +11,6 @@ class Entity {
      */
     struct Velocity : public Vector2 {
         using Vector2::Vector2;
-    };
-
-    /**
-     * "Axis-Aligned Bounding Box", and all that name implies.
-     * Rect specialization for position, size, and collision geometry.
-     */
-    struct AABB : Rect {
-        /**
-         * Describes an edge of an AABB.
-         */
-        enum class Edge {
-            none,
-            left,
-            top,
-            right,
-            bottom,
-        };
-
-        /**
-         * Returns the Minkowski Difference between AABBs.
-         */
-        const Rect operator-(const AABB& rhs) const;
-
-        /**
-         * The geometric spatial-difference between two convex polygons.
-         * Carries some interesting properties that allow it to be used for
-         * collision detection.
-         */
-        const Rect minkowskiDifference(const AABB& other) const;
-
-        /**
-         * Does the given point line within the boundaries of this AABB?
-         */
-        bool hasPoint(int x, int y) const;
-
-        /**
-         * Return the edge of `this` most overlapped by the `other` AABB.
-         * Will return `Edge::none` of no overlap occurs.
-         *
-         * Can be used to determine the most likely direction of "incoming"
-         * collisions.
-         */
-        Edge getIntersectingEdge(const AABB& other) const;
     };
 
     /**
@@ -174,5 +123,5 @@ class Entity {
 
   private:
     Velocity velocity{0, 0};
-    AABB aabb{0, 0, 0, 0};
+    Rect aabb{0, 0, 0, 0};
 };
