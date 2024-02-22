@@ -79,9 +79,11 @@ Entity::AABB::Edge Entity::AABB::getIntersectingEdge(const Entity::AABB& other) 
     int right  = std::abs(result.x + result.w);
     int bottom = std::abs(result.y + result.h);
 
+    // TODO: Remove branch via. culling
     if (isIntersecting) {
         int closestEdge{std::min({left, right, top, bottom})};
 
+        // TODO: Refactor to provide collision vector for simplified resolution.
         if (closestEdge == left)
             return Edge::left;
         if (closestEdge == right)
