@@ -69,15 +69,15 @@ bool Entity::AABB::hasPoint(int x, int y) const {
 }
 
 Entity::AABB::Edge Entity::AABB::getIntersectingEdge(const Entity::AABB& other) const {
-    AABB result{minkowskiDifference(other)};
+    AABB minkowski{minkowskiDifference(other)};
 
     // If the minkowski box surrounds the origin, then a collision has occured.
-    bool isIntersecting{result.hasPoint(0, 0)};
+    bool isIntersecting{minkowski.hasPoint(0, 0)};
 
-    int left   = std::abs(result.x);
-    int top    = std::abs(result.y);
-    int right  = std::abs(result.x + result.w);
-    int bottom = std::abs(result.y + result.h);
+    int left   = std::abs(minkowski.x);
+    int top    = std::abs(minkowski.y);
+    int right  = std::abs(minkowski.x + minkowski.w);
+    int bottom = std::abs(minkowski.y + minkowski.h);
 
     // TODO: Remove branch via. culling
     if (isIntersecting) {
