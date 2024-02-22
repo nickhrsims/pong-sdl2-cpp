@@ -2,14 +2,7 @@
 
 #include <SDL_rect.h>
 
-/**
- * 2-Dimensional Vector.
- * Can be used as a point, velocity, size, etc.
- */
-struct Vector2 {
-    int x;
-    int y;
-};
+#include "core/vector2.h"
 
 /**
  * A simple wrapper around SDL_Rect.
@@ -24,7 +17,9 @@ class Entity {
      * A Vector2 specialization for velocity.
      * Presently doesn't add anything new, here to support refactoring.
      */
-    struct Velocity : Vector2 {};
+    struct Velocity : public Vector2 {
+        using Vector2::Vector2;
+    };
 
     /**
      * "Axis-Aligned Bounding Box", and all that name implies.
