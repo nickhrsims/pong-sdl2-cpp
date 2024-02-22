@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "entity.h"
 
 const Vector2 Entity::getPosition() const {
@@ -78,13 +80,7 @@ Entity::AABB::Edge Entity::AABB::getIntersectingEdge(const Entity::AABB& other) 
     int bottom = std::abs(result.y + result.h);
 
     if (isIntersecting) {
-        int closestEdge = left;
-        if (right < closestEdge)
-            closestEdge = right;
-        if (top < closestEdge)
-            closestEdge = top;
-        if (bottom < closestEdge)
-            closestEdge = bottom;
+        int closestEdge{std::min({left, right, top, bottom})};
 
         if (closestEdge == left)
             return Edge::left;
