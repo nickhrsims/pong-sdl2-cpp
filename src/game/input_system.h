@@ -40,6 +40,8 @@ class InputSystem {
     // Configuration
     // ---------------------------------
 
+    // TODO: Separate action map by player.
+
     struct Config {
         friend InputSystem;
 
