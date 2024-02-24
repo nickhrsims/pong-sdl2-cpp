@@ -1,16 +1,63 @@
-#include "rect.h"
 #include <algorithm>
 
-const Rect Rect::minkowskiDifference(const Rect& other) const {
+#include "rect.h"
+
+// -----------------------------------------------------------------------------
+// Constructors
+// -----------------------------------------------------------------------------
+
+Rect::Rect() : SDL_Rect{0, 0, 0, 0} {}
+Rect::Rect(int x, int y, int w, int h) : SDL_Rect{x, y, w, h} {}
+Rect::Rect(const Rect& rhs) : SDL_Rect{rhs.x, rhs.y, rhs.w, rhs.h} {}
+Rect::Rect(const Rect&& rhs) : SDL_Rect{rhs.x, rhs.y, rhs.w, rhs.h} {}
+
+// -----------------------------------------------------------------------------
+// Operators
+// -----------------------------------------------------------------------------
+
+// Copy Assignment
+Rect& Rect::operator=(const Rect& rhs) {
+    this->x = rhs.x;
+    this->y = rhs.y;
+    this->w = rhs.w;
+    this->h = rhs.h;
+    return *this;
+}
+
+// Move Assignment
+Rect& Rect::operator=(const Rect&& rhs) {
+    this->x = rhs.x;
+    this->y = rhs.y;
+    this->w = rhs.w;
+    this->h = rhs.h;
+    return *this;
+}
+
+// Sum (Minkowski Sum)
+const Rect Rect::operator+(const Rect& rhs) const {
     return Rect{
-        x - (other.x + other.w),
-        y - (other.y + other.h),
-        w + other.w,
-        h + other.h,
+        x + (rhs.x + rhs.w),
+        y + (rhs.y + rhs.h),
+        w + rhs.w,
+        h + rhs.h,
     };
 }
 
-const Rect Rect::operator-(const Rect& rhs) const { return minkowskiDifference(rhs); }
+// Difference (Minkowski Difference)
+const Rect Rect::operator-(const Rect& rhs) const {
+    return Rect{
+        x - (rhs.x + rhs.w),
+        y - (rhs.y + rhs.h),
+        w + rhs.w,
+        h + rhs.h,
+    };
+}
+
+// -----------------------------------------------------------------------------
+// Public API Implementation
+// -----------------------------------------------------------------------------
+
+const Rect Rect::minkowskiDifference(const Rect& other) const { return *this - other; }
 
 bool Rect::hasPoint(int x, int y) const {
     int left   = x;

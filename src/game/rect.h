@@ -8,8 +8,29 @@
  *
  * A simple wrapper around SDL_Rect.
  * Rect specialization for position, size, and collision geometry.
+ *
+ * The "origin" from the perspective of the API is the center of the Rect.
  */
-struct Rect : SDL_Rect {
+struct Rect : public SDL_Rect {
+    Rect();
+    Rect(int x, int y, int w, int h);
+
+    Rect(const Rect& rhs);
+    Rect(const Rect&& rhs);
+
+    Rect& operator=(const Rect& rhs);
+    Rect& operator=(const Rect&& rhs);
+
+    /**
+     * Returns the Minkowski Sum between Rects.
+     */
+    const Rect operator+(const Rect& rhs) const;
+
+    /**
+     * Returns the Minkowski Difference between Rects.
+     */
+    const Rect operator-(const Rect& rhs) const;
+
     /**
      * Describes an edge of an AABB.
      */
@@ -20,11 +41,6 @@ struct Rect : SDL_Rect {
         right,
         bottom,
     };
-
-    /**
-     * Returns the Minkowski Difference between Rects.
-     */
-    const Rect operator-(const Rect& rhs) const;
 
     /**
      * The geometric spatial-difference between two convex polygons.
