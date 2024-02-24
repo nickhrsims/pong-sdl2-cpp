@@ -2,7 +2,9 @@
 
 #include <spdlog/spdlog.h>
 
+#include "SDL_scancode.h"
 #include "game.h"
+#include "game/entities/paddle.h"
 #include "game/input_system.h"
 
 // -----------------------------------------------------------------------------
@@ -12,13 +14,57 @@
 Game::Game(const App::Config& config) : App{config}, currentState{&startState} {
 
     // ---------------------------------
+    // Field
+    // ---------------------------------
+
+    // Match the window size.
+    Rect field{static_cast<int>(config.displaySystemConfig.windowPositionX),
+               static_cast<int>(config.displaySystemConfig.windowPositionY),
+               static_cast<int>(config.displaySystemConfig.windowWidth),
+               static_cast<int>(config.displaySystemConfig.windowHeight)};
+
+    // ---------------------------------
+    // Entities
+    // ---------------------------------
+
+    // Left Player Paddle (player 1)
+    std::unique_ptr<Paddle> leftPaddle{new Paddle{Player::one}};
+    leftPaddle->setPosition(64, 64);
+
+    // Right Player Paddle (player 2)
+    std::unique_ptr<Paddle> rightPaddle(new Paddle{Player::two});
+    rightPaddle->setPosition(128, 64);
+
+    // We store paddles separate from the ball for various reasons.
+    paddles.push_back(std::move(leftPaddle));
+    paddles.push_back(std::move(rightPaddle));
+
+    // ---------------------------------
     // Sub-system Intitialization
     // ---------------------------------
 
     // --- Input System
     {
+        InputSystem& input{InputSystem::get()};
         InputSystem::Config config;
-        InputSystem::get().initialize(config);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_A,
+                                        InputSystem::Action::playerOneUp);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_Z,
+                                        InputSystem::Action::playerOneDown);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_K,
+                                        InputSystem::Action::playerTwoUp);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_M,
+                                        InputSystem::Action::playerTwoDown);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_Q, InputSystem::Action::quit);
+
+        input.initialize(config);
+
+        quitGameActionSubscription =
+            input.onActionPressed([this](InputSystem::Action action) {
+                if (action == InputSystem::Action::quit) {
+                    stop();
+                }
+            });
     }
 
     // ---------------------------------
@@ -61,9 +107,27 @@ Game::Game(const App::Config& config) : App{config}, currentState{&startState} {
     // ---------------------------------
 
     // --- Start
-    startState.enter        = []() {};
-    startState.exit         = []() {};
-    startState.processFrame = [](const float delta) { (void)delta; };
+    startState.enter = [this]() { spdlog::debug("Entering {} state", startState.tag); };
+    startState.exit  = []() {};
+    startState.processFrame = [this](const float delta) {
+        static const RenderingSystem& render{RenderingSystem::get()};
+
+        // --- Update
+
+        for (auto& entity : paddles) {
+            entity->update(delta);
+        }
+
+        // --- Render
+
+        render.clear();
+
+        for (auto const& entity : paddles) {
+            entity->draw();
+        }
+
+        render.show();
+    };
     startState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Reset
@@ -79,7 +143,9 @@ Game::Game(const App::Config& config) : App{config}, currentState{&startState} {
     countdownState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Field Setup
-    fieldSetupState.enter        = []() {};
+    fieldSetupState.enter = []() {
+
+    };
     fieldSetupState.exit         = []() {};
     fieldSetupState.processFrame = [](const float delta) { (void)delta; };
     fieldSetupState.processEvent = [](const SDL_Event& event) { (void)event; };
@@ -103,7 +169,7 @@ Game::Game(const App::Config& config) : App{config}, currentState{&startState} {
     gameOverState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Shut Down
-    shutdownState.enter        = []() {};
+    shutdownState.enter        = [this]() { stop(); };
     shutdownState.exit         = []() {};
     shutdownState.processFrame = [](const float delta) { (void)delta; };
     shutdownState.processEvent = [](const SDL_Event& event) { (void)event; };
@@ -138,7 +204,7 @@ Game::Game(const App::Config& config) : App{config}, currentState{&startState} {
 
 #endif
 }
-Game::~Game() {}
+Game::~Game() { InputSystem::get().offActionPressed(quitGameActionSubscription); }
 
 // -----------------------------------------------------------------------------
 // Frame / Event Processing Dispatch

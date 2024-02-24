@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <list>
 #include <string>
 #include <unordered_map>
 
@@ -35,6 +37,12 @@ class InputSystem {
         pause,
         quit
     };
+
+    // ---------------------------------
+    // Subscription Node
+    // ---------------------------------
+
+    typedef std::_List_iterator<std::function<void(InputSystem::Action)>> Subscription;
 
     // ---------------------------------
     // Configuration
@@ -99,6 +107,8 @@ class InputSystem {
     void handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event);
 
     bool isActionPressed(Action action);
+    Subscription onActionPressed(std::function<void(Action action)> callback);
+    void offActionPressed(Subscription subscription);
 
     SDL_Event x;
 
@@ -141,6 +151,10 @@ class InputSystem {
      */
     static const uint8_t mouseButtonCount{6};
     Action buttonToActionMap[mouseButtonCount]; // Read note above on magic number `6`
+
+    // --- Observors
+
+    std::list<std::function<void(Action action)>> observers;
 
     // --- Explicitely deleted constructors
 

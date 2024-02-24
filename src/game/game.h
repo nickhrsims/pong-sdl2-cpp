@@ -1,6 +1,8 @@
 #include <string>
 
 #include "core/app.h"
+#include "entity.h"
+#include "input_system.h"
 
 /**
  * A fancy FSM to dispatch `App` control to `Game::State`s.
@@ -42,7 +44,11 @@ class Game : public App {
     void processEvent(const SDL_Event& event) override;
 
   private:
+    std::vector<std::unique_ptr<Entity>> paddles;
     State* currentState;
+
+    // Observer
+    InputSystem::Subscription quitGameActionSubscription;
 
     // States;
     State startState{"Start"};

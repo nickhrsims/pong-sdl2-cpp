@@ -69,13 +69,48 @@ InputSystem& InputSystem::get() {
 }
 
 // -----------------------------------------------------------------------------
-// Action Event Handling + Propogation
+// Raw Event Handling
 // -----------------------------------------------------------------------------
 
-void InputSystem::handleKeyDownEvent(const SDL_KeyboardEvent& event) { (void)event; }
+void InputSystem::handleKeyDownEvent(const SDL_KeyboardEvent& event) {
+    SDL_Scancode scancode{event.keysym.scancode};
+    Action action{scancodeToActionMap[scancode]};
+
+    // If no action assigned to scancode, ignore the event.
+    if (action == Action::none) {
+        return;
+    }
+
+    for (auto const& observer : observers) {
+        observer(action);
+    }
+}
 
 void InputSystem::handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event) {
-    (void)event;
+    uint8_t button{event.button};
+    Action action{buttonToActionMap[button]};
+
+    // If no action assigned to button, ignore the event.
+    if (action == Action::none) {
+        return;
+    }
+
+    for (auto const& observer : observers) {
+        observer(action);
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Action-Event Subscriptions
+// -----------------------------------------------------------------------------
+
+InputSystem::Subscription
+InputSystem::onActionPressed(std::function<void(Action action)> callback) {
+    return observers.insert(observers.end(), callback);
+}
+
+void InputSystem::offActionPressed(Subscription subscription) {
+    observers.erase(subscription);
 }
 
 // -----------------------------------------------------------------------------
