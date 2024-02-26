@@ -21,16 +21,6 @@ Game::Game(const App::Config& config)
       } {
 
     // ---------------------------------
-    // Field
-    // ---------------------------------
-
-    // Match the window size.
-    Rect field{static_cast<int>(config.displaySystemConfig.windowPositionX),
-               static_cast<int>(config.displaySystemConfig.windowPositionY),
-               static_cast<int>(config.displaySystemConfig.windowWidth),
-               static_cast<int>(config.displaySystemConfig.windowHeight)};
-
-    // ---------------------------------
     // Entities
     // ---------------------------------
 
