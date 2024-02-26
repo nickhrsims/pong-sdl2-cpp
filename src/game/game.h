@@ -49,8 +49,8 @@ class Game : public App {
     State* currentState;
     Rect field;
 
-    // Observer for "Q" key quit action
-    InputSystem::Subscription quitGameActionSubscription;
+    // Various input-action event subscriptions
+    InputSystem::Subscription actionSubscription;
 
     // States
     State startState{"Start"};

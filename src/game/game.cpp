@@ -56,12 +56,21 @@ Game::Game(const App::Config& config)
 
         input.initialize(config);
 
-        quitGameActionSubscription =
-            input.onActionPressed([this](InputSystem::Action action) {
-                if (action == InputSystem::Action::quit) {
-                    stop();
-                }
-            });
+        actionSubscription = input.onActionPressed([this](InputSystem::Action action) {
+            switch (action) {
+            case InputSystem::Action::quit:
+                stop();
+                return;
+            case InputSystem::Action::pause:
+                pause();
+                return;
+            case InputSystem::Action::confirm:
+                confirm();
+                return;
+            default:
+                return;
+            }
+        });
     }
 
     // ---------------------------------
@@ -201,7 +210,7 @@ Game::Game(const App::Config& config)
 
 #endif
 }
-Game::~Game() { InputSystem::get().offActionPressed(quitGameActionSubscription); }
+Game::~Game() { InputSystem::get().offActionPressed(actionSubscription); }
 
 // -----------------------------------------------------------------------------
 // Frame / Event Processing Dispatch
