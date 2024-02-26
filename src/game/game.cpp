@@ -247,3 +247,11 @@ void Game::transition(State* next) {
         }
     }
 }
+
+void Game::done() { transition(currentState->onDone); }
+void Game::quit() { transition(currentState->onQuit); }
+void Game::pause() { transition(currentState->onPause); }
+void Game::next() { transition(currentState->onNext); }
+void Game::confirm() { transition(currentState->onConfirm); }
+void Game::cancel() { transition(currentState->onCancel); }
+void Game::gameOver() { transition(currentState->onGameOver); }

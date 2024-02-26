@@ -63,12 +63,12 @@ class Game : public App {
     // --- Triggers
     // "Raw" transition handler
     void transition(State* next);
-    /// Specific transition dispatch
-    std::function<void()> done{[this]() { transition(currentState->onDone); }};
-    std::function<void()> quit{[this]() { transition(currentState->onQuit); }};
-    std::function<void()> pause{[this]() { transition(currentState->onPause); }};
-    std::function<void()> next{[this]() { transition(currentState->onNext); }};
-    std::function<void()> confirm{[this]() { transition(currentState->onConfirm); }};
-    std::function<void()> cancel{[this]() { transition(currentState->onCancel); }};
-    std::function<void()> gameOver{[this]() { transition(currentState->onGameOver); }};
+    // Specific transition dispatch
+    void done();
+    void quit();
+    void pause();
+    void next();
+    void confirm();
+    void cancel();
+    void gameOver();
 };
