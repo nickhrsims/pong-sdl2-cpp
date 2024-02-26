@@ -47,6 +47,7 @@ class Game : public App {
     // --- Data Members
     std::vector<std::unique_ptr<Entity>> paddles;
     State* currentState;
+    Rect field;
 
     // Observer for "Q" key quit action
     InputSystem::Subscription quitGameActionSubscription;

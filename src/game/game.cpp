@@ -11,7 +11,14 @@
 // Constructor / Destructor
 // -----------------------------------------------------------------------------
 
-Game::Game(const App::Config& config) : App{config}, currentState{&startState} {
+Game::Game(const App::Config& config)
+    : App{config}, currentState{&startState},
+      field{
+          static_cast<int>(config.displaySystemConfig.windowPositionX),
+          static_cast<int>(config.displaySystemConfig.windowPositionY),
+          static_cast<int>(config.displaySystemConfig.windowWidth),
+          static_cast<int>(config.displaySystemConfig.windowHeight),
+      } {
 
     // ---------------------------------
     // Field
