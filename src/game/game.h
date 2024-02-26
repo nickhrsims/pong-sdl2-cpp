@@ -44,13 +44,14 @@ class Game : public App {
     void processEvent(const SDL_Event& event) override;
 
   private:
+    // --- Data Members
     std::vector<std::unique_ptr<Entity>> paddles;
     State* currentState;
 
-    // Observer
+    // Observer for "Q" key quit action
     InputSystem::Subscription quitGameActionSubscription;
 
-    // States;
+    // States
     State startState{"Start"};
     State resetState{"Reset"};
     State countdownState{"Countdown"};
