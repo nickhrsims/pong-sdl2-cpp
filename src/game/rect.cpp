@@ -101,7 +101,7 @@ Rect::Edge Rect::getIntersectingEdge(const Rect& other) const {
 }
 
 Rect Rect::getVerticalSlice(unsigned int ratio, unsigned int index) const {
-    if ((index + 1) >= ratio) {
+    if (index >= ratio) {
         throw std::invalid_argument("`index` must be less than `ratio`");
     }
 

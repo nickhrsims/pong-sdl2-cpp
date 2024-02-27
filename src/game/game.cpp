@@ -24,13 +24,25 @@ Game::Game(const App::Config& config)
     // Entities
     // ---------------------------------
 
+    // How close are the paddles to the walls?
+    // (for actual meaning, see `Rect::getVerticalSlice()`)
+    static const unsigned int fieldSliceRatio{6};
+    // What side of the field?
+    static const unsigned int leftField{0};
+    static const unsigned int rightField{fieldSliceRatio - 1};
+    // Calculate the center of the left and right "sections" of the field.
+    const Vector2 leftFieldSectionCenter{
+        field.getVerticalSlice(fieldSliceRatio, leftField).getCenter()};
+    const Vector2 rightFieldSectionCenter{
+        field.getVerticalSlice(fieldSliceRatio, rightField).getCenter()};
+
     // Left Player Paddle (player 1)
     std::unique_ptr<Paddle> leftPaddle{new Paddle{Player::one}};
-    leftPaddle->setPosition(64, 64);
+    leftPaddle->setPosition(leftFieldSectionCenter.x, leftFieldSectionCenter.y);
 
     // Right Player Paddle (player 2)
     std::unique_ptr<Paddle> rightPaddle(new Paddle{Player::two});
-    rightPaddle->setPosition(128, 64);
+    rightPaddle->setPosition(rightFieldSectionCenter.x, rightFieldSectionCenter.y);
 
     // We store paddles separate from the ball for various reasons.
     paddles.push_back(std::move(leftPaddle));
