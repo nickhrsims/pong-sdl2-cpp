@@ -2,6 +2,8 @@
 
 #include "SDL_rect.h"
 
+#include "core/vector2.h"
+
 /**
  *
  * A.k.a "Axis-Aligned Bounding Box", and all that implies.
@@ -41,6 +43,8 @@ struct Rect : public SDL_Rect {
         right,
         bottom,
     };
+
+    Vector2 getCenter() const;
 
     /**
      * The geometric spatial-difference between two convex polygons.

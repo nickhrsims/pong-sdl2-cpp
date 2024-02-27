@@ -59,6 +59,8 @@ const Rect Rect::operator-(const Rect& rhs) const {
 
 const Rect Rect::minkowskiDifference(const Rect& other) const { return *this - other; }
 
+Vector2 Rect::getCenter() const { return Vector2{x + w / 2, y + h / 2}; }
+
 bool Rect::hasPoint(int x, int y) const {
     int left   = x;
     int top    = y;
