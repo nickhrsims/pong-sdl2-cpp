@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <stdexcept>
 
 #include "rect.h"
 
@@ -97,4 +98,20 @@ Rect::Edge Rect::getIntersectingEdge(const Rect& other) const {
     }
 
     return Edge::none; // Not intersecting
+}
+
+Rect Rect::getVerticalSlice(unsigned int ratio, unsigned int index) const {
+    if ((index + 1) >= ratio) {
+        throw std::invalid_argument("`index` must be less than `ratio`");
+    }
+
+    Rect slice{*this};
+
+    // A "unit width" conforming to a common ratio.
+    slice.w = (this->x + this->w) / ratio;
+
+    // A "unit distance" from the left edge of the rect.
+    slice.x += (index + 1) * slice.w;
+
+    return slice;
 }

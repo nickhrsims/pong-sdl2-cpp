@@ -69,4 +69,41 @@ struct Rect : public SDL_Rect {
      * collisions.
      */
     Edge getIntersectingEdge(const Rect& other) const;
+
+    /**
+     * A vertical slice of a `Rect`.
+     *
+     * `ratio` - number of slices
+     * `index` - specific equal-width slice.
+     *
+     * Each paddle (left or right) determines where each
+     * field section begins horizontally.
+     *
+     * Examples
+     * --------
+     *
+     *   First slice (i.e. index 0):
+     *     Slice occupies this space on the left end of the rect.
+     *    ----------------
+     *   |XXX|            |
+     *   |XXX|            |
+     *   |XXX|            |
+     *    ----------------
+     *
+     *   Last slice (i.e. index == (sliceCount - 1)):
+     *     Slice occupies this space on the right end of the rect.
+     *    ----------------
+     *   |            |XXX|
+     *   |            |XXX|
+     *   |            |XXX|
+     *    ----------------
+     *
+     * The specific width of the slice is determined
+     * by the given `ratio`.
+     *
+     *
+     * This slice is used to simplify positioning logic.
+     */
+
+    Rect getVerticalSlice(unsigned int sliceCount, unsigned int index) const;
 };
