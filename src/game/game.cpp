@@ -28,13 +28,13 @@ Game::Game(const App::Config& config)
     // (for actual meaning, see `Rect::getVerticalSlice()`)
     static const unsigned int fieldSliceRatio{6};
     // What side of the field?
-    static const unsigned int leftField{0};
-    static const unsigned int rightField{fieldSliceRatio - 1};
+    static const unsigned int leftFieldIndex{0};
+    static const unsigned int rightFieldIndex{fieldSliceRatio - 1};
     // Calculate the center of the left and right "sections" of the field.
     const Vector2 leftFieldSectionCenter{
-        field.getVerticalSlice(fieldSliceRatio, leftField).getCenter()};
+        field.getVerticalSlice(fieldSliceRatio, leftFieldIndex).getCenter()};
     const Vector2 rightFieldSectionCenter{
-        field.getVerticalSlice(fieldSliceRatio, rightField).getCenter()};
+        field.getVerticalSlice(fieldSliceRatio, rightFieldIndex).getCenter()};
 
     // Left Player Paddle (player 1)
     std::unique_ptr<Paddle> leftPaddle{new Paddle{Player::one}};
