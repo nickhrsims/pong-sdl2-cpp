@@ -1,7 +1,7 @@
 #pragma once
 
+#include "core/rect.h"
 #include "core/vector2.h"
-#include "rect.h"
 
 class Entity {
   public:
