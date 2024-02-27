@@ -14,8 +14,8 @@
 Game::Game(const App::Config& config)
     : App{config}, currentState{&startState},
       field{
-          static_cast<int>(config.displaySystemConfig.windowPositionX),
-          static_cast<int>(config.displaySystemConfig.windowPositionY),
+          0,
+          0,
           static_cast<int>(config.displaySystemConfig.windowWidth),
           static_cast<int>(config.displaySystemConfig.windowHeight),
       } {
