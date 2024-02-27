@@ -105,5 +105,5 @@ struct Rect : public SDL_Rect {
      * This slice is used to simplify positioning logic.
      */
 
-    Rect getVerticalSlice(unsigned int sliceCount, unsigned int index) const;
+    Rect getVerticalSlice(unsigned int ratio, unsigned int index) const;
 };
