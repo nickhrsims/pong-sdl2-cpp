@@ -64,6 +64,10 @@ Game::Game(const App::Config& config)
                                         InputSystem::Action::playerTwoUp);
         config.setKeyboardKeyDownAction(SDL_SCANCODE_M,
                                         InputSystem::Action::playerTwoDown);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_RETURN,
+                                        InputSystem::Action::confirm);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_BACKSPACE,
+                                        InputSystem::Action::cancel);
         config.setKeyboardKeyDownAction(SDL_SCANCODE_Q, InputSystem::Action::quit);
 
         input.initialize(config);
