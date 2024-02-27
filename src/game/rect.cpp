@@ -111,7 +111,7 @@ Rect Rect::getVerticalSlice(unsigned int ratio, unsigned int index) const {
     slice.w = (this->x + this->w) / ratio;
 
     // A "unit distance" from the left edge of the rect.
-    slice.x += (index + 1) * slice.w;
+    slice.x += ((index + 1) * slice.w) - slice.w / 2;
 
     return slice;
 }
