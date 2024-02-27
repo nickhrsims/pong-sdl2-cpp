@@ -44,6 +44,9 @@ struct Rect : public SDL_Rect {
         bottom,
     };
 
+    /**
+     * Get center position.
+     */
     Vector2 getCenter() const;
 
     /**
