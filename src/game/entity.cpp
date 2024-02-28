@@ -34,8 +34,8 @@ void Entity::setVelocity(int vx, int vy) {
 }
 
 void Entity::move(float delta) {
-    aabb.x += velocity.x * delta;
-    aabb.y += velocity.y * delta;
+    aabb.x += std::round(velocity.x * delta);
+    aabb.y += std::round(velocity.y * delta);
 }
 
 const Rect Entity::getRect() const { return aabb; }
