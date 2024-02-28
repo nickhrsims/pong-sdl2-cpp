@@ -7,6 +7,8 @@
 #include "game/entities/paddle.h"
 #include "game/input_system.h"
 
+// NOTE: A little bit of pointer chasing is OK for a game this small
+
 // -----------------------------------------------------------------------------
 // Constructor / Destructor
 // -----------------------------------------------------------------------------
