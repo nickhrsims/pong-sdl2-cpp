@@ -3,7 +3,9 @@
 #include <spdlog/spdlog.h>
 
 #include "SDL_scancode.h"
+
 #include "game.h"
+#include "game/collision_system.h"
 #include "game/entities/paddle.h"
 #include "game/input_system.h"
 
@@ -135,6 +137,10 @@ Game::Game(const App::Config& config)
 
         leftPaddle.update(delta);
         rightPaddle.update(delta);
+
+        // --- Collide
+
+        CollisionSystem::resolve(field, leftPaddle, rightPaddle);
 
         // --- Render
 
