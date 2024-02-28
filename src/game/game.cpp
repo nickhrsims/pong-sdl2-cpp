@@ -14,7 +14,8 @@
 // -----------------------------------------------------------------------------
 
 Game::Game(const App::Config& config)
-    : App{config}, currentState{&startState},
+    : App{config}, leftPaddle{Player::one}, rightPaddle{Player::two},
+      currentState{&startState},
       field{
           0,
           0,
@@ -39,16 +40,10 @@ Game::Game(const App::Config& config)
         field.getVerticalSlice(fieldSliceRatio, rightFieldIndex).getCenter()};
 
     // Left Player Paddle (player 1)
-    std::unique_ptr<Paddle> leftPaddle{new Paddle{Player::one}};
-    leftPaddle->setPosition(leftFieldSectionCenter.x, leftFieldSectionCenter.y);
+    leftPaddle.setPosition(leftFieldSectionCenter.x, leftFieldSectionCenter.y);
 
     // Right Player Paddle (player 2)
-    std::unique_ptr<Paddle> rightPaddle(new Paddle{Player::two});
-    rightPaddle->setPosition(rightFieldSectionCenter.x, rightFieldSectionCenter.y);
-
-    // We store paddles separate from the ball for various reasons.
-    paddles.push_back(std::move(leftPaddle));
-    paddles.push_back(std::move(rightPaddle));
+    rightPaddle.setPosition(rightFieldSectionCenter.x, rightFieldSectionCenter.y);
 
     // ---------------------------------
     // Sub-system Intitialization
@@ -138,17 +133,15 @@ Game::Game(const App::Config& config)
 
         // --- Update
 
-        for (auto& entity : paddles) {
-            entity->update(delta);
-        }
+        leftPaddle.update(delta);
+        rightPaddle.update(delta);
 
         // --- Render
 
         render.clear();
 
-        for (auto const& entity : paddles) {
-            entity->draw();
-        }
+        leftPaddle.draw();
+        rightPaddle.draw();
 
         render.show();
     };

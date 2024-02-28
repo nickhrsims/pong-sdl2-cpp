@@ -3,7 +3,7 @@
 #include <string>
 
 #include "core/app.h"
-#include "entity.h"
+#include "entities/paddle.h"
 #include "input_system.h"
 
 /**
@@ -47,7 +47,8 @@ class Game : public App {
 
   private:
     // --- Data Members
-    std::vector<std::unique_ptr<Entity>> paddles;
+    Paddle leftPaddle;
+    Paddle rightPaddle;
     State* currentState;
     Rect field;
 
