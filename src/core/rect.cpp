@@ -62,13 +62,13 @@ const Rect Rect::minkowskiDifference(const Rect& other) const { return *this - o
 
 Vector2 Rect::getCenter() const { return Vector2{x + w / 2, y + h / 2}; }
 
-bool Rect::hasPoint(int x, int y) const {
+bool Rect::hasPoint(int px, int py) const {
     int left   = x;
     int top    = y;
     int right  = x + w;
     int bottom = y + h;
 
-    return (left < x && x < right && top < y && y < bottom);
+    return (left < px && px < right && top < py && py < bottom);
 }
 
 Rect::Edge Rect::getIntersectingEdge(const Rect& other) const {
