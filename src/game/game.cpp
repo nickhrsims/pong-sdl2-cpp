@@ -135,31 +135,9 @@ Game::Game(const App::Config& config)
     // ---------------------------------
 
     // --- Start
-    startState.enter = [this]() { spdlog::debug("Entering {} state", startState.tag); };
-    startState.exit  = []() {};
-    startState.processFrame = [this](const float delta) {
-        static const RenderingSystem& render{RenderingSystem::get()};
-
-        // --- Update
-
-        ball.update(delta);
-        leftPaddle.update(delta);
-        rightPaddle.update(delta);
-
-        // --- Collide
-
-        CollisionSystem::resolve(field, leftPaddle, rightPaddle, ball);
-
-        // --- Render
-
-        render.clear();
-
-        ball.draw();
-        leftPaddle.draw();
-        rightPaddle.draw();
-
-        render.show();
-    };
+    startState.enter        = []() {};
+    startState.exit         = []() {};
+    startState.processFrame = [](const float delta) { (void)delta; };
     startState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Reset
