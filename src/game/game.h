@@ -56,9 +56,11 @@ class Game : public App {
     unsigned char leftScore{0};
     unsigned char rightScore{0};
 
+    // --- Input
     // Various input-action event subscriptions
     InputSystem::Subscription actionSubscription;
 
+    // --- State Management
     // States
     State startState{"Start"};
     State resetState{"Reset"};
@@ -69,7 +71,7 @@ class Game : public App {
     State gameOverState{"Game Over"};
     State shutdownState{"Shutdown"};
 
-    // --- Triggers
+    // Triggers
     // "Raw" transition handler
     void transition(State* next);
     // Specific transition dispatch
