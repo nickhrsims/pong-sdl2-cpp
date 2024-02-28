@@ -3,7 +3,7 @@
 #include <spdlog/spdlog.h>
 
 #include "SDL_scancode.h"
-#include "input_system.h"
+#include "input_bus.h"
 
 static const std::string TAG{"Input Sub-system"};
 
@@ -11,14 +11,14 @@ static const std::string TAG{"Input Sub-system"};
 // No-op Constructor / Destructor
 // -----------------------------------------------------------------------------
 
-InputSystem::InputSystem() {}
-InputSystem::~InputSystem() {}
+InputBus::InputBus() {}
+InputBus::~InputBus() {}
 
 // -----------------------------------------------------------------------------
 // Initialization / Termination
 // -----------------------------------------------------------------------------
 
-void InputSystem::initialize(const Config& config) {
+void InputBus::initialize(const Config& config) {
     spdlog::info("Initializing {}.", TAG);
 
     for (auto const& [action, description] : config.actionMap) {
@@ -44,7 +44,7 @@ void InputSystem::initialize(const Config& config) {
     }
 }
 
-void InputSystem::terminate() {
+void InputBus::terminate() {
     spdlog::info("Terminating {}.", TAG);
     actionToInputTypeMap.clear();
     actionToScancodeMap.clear();
@@ -53,7 +53,7 @@ void InputSystem::terminate() {
     std::fill_n(buttonToActionMap, mouseButtonCount, Action::none);
 }
 
-void InputSystem::reinitialize(const Config& config) {
+void InputBus::reinitialize(const Config& config) {
     terminate();
     initialize(config);
 }
@@ -63,8 +63,8 @@ void InputSystem::reinitialize(const Config& config) {
 // -----------------------------------------------------------------------------
 
 // Return singleton.
-InputSystem& InputSystem::get() {
-    static InputSystem instance{};
+InputBus& InputBus::get() {
+    static InputBus instance{};
     return instance;
 }
 
@@ -72,7 +72,7 @@ InputSystem& InputSystem::get() {
 // Raw Event Handling
 // -----------------------------------------------------------------------------
 
-void InputSystem::handleKeyDownEvent(const SDL_KeyboardEvent& event) {
+void InputBus::handleKeyDownEvent(const SDL_KeyboardEvent& event) {
     SDL_Scancode scancode{event.keysym.scancode};
     Action action{scancodeToActionMap[scancode]};
 
@@ -86,7 +86,7 @@ void InputSystem::handleKeyDownEvent(const SDL_KeyboardEvent& event) {
     }
 }
 
-void InputSystem::handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event) {
+void InputBus::handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event) {
     uint8_t button{event.button};
     Action action{buttonToActionMap[button]};
 
@@ -104,12 +104,12 @@ void InputSystem::handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event) 
 // Action-Event Subscriptions
 // -----------------------------------------------------------------------------
 
-InputSystem::Subscription
-InputSystem::onActionPressed(std::function<void(Action action)> callback) {
+InputBus::Subscription
+InputBus::onActionPressed(std::function<void(Action action)> callback) {
     return observers.insert(observers.end(), callback);
 }
 
-void InputSystem::offActionPressed(Subscription subscription) {
+void InputBus::offActionPressed(Subscription subscription) {
     observers.erase(subscription);
 }
 
@@ -117,13 +117,12 @@ void InputSystem::offActionPressed(Subscription subscription) {
 // Config :: Input Action Configuration
 // -----------------------------------------------------------------------------
 
-void InputSystem::Config::setKeyboardKeyDownAction(SDL_Scancode scancode,
-                                                   Action action) {
+void InputBus::Config::setKeyboardKeyDownAction(SDL_Scancode scancode, Action action) {
     actionMap[action].type              = InputType::keyboard;
     actionMap[action].keyboard.scancode = scancode;
 }
 
-void InputSystem::Config::setMouseButtonDownAction(uint8_t button, Action action) {
+void InputBus::Config::setMouseButtonDownAction(uint8_t button, Action action) {
     actionMap[action].type         = InputType::mouse;
     actionMap[action].mouse.button = button;
 }
@@ -132,7 +131,7 @@ void InputSystem::Config::setMouseButtonDownAction(uint8_t button, Action action
 // Action Queries
 // -----------------------------------------------------------------------------
 
-bool InputSystem::isActionPressed(Action action) {
+bool InputBus::isActionPressed(Action action) {
     switch (actionToInputTypeMap[action]) {
     case InputType::keyboard:
         return isKeyboardKeyDownActionPressed(action);
@@ -143,13 +142,13 @@ bool InputSystem::isActionPressed(Action action) {
     }
 }
 
-bool InputSystem::isKeyboardKeyDownActionPressed(Action action) {
+bool InputBus::isKeyboardKeyDownActionPressed(Action action) {
     SDL_Scancode scancode{actionToScancodeMap[action]};
     const uint8_t* keyboardState = SDL_GetKeyboardState(NULL);
     return keyboardState[scancode];
 }
 
-bool InputSystem::isMouseButtonDownActionPressed(Action action) {
+bool InputBus::isMouseButtonDownActionPressed(Action action) {
     uint8_t button{actionToMouseButtonMap[action]};
     const uint32_t mouseState = SDL_GetMouseState(NULL, NULL);
     return SDL_BUTTON(button) & mouseState;

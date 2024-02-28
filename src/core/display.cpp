@@ -3,7 +3,8 @@
 #include <spdlog/spdlog.h>
 
 #include "SDL.h"
-#include "display_system.h"
+
+#include "display.h"
 
 static const std::string TAG{"Display Sub-system"};
 
@@ -11,14 +12,14 @@ static const std::string TAG{"Display Sub-system"};
 // No-op Constructor / Destructor
 // -----------------------------------------------------------------------------
 
-DisplaySystem::DisplaySystem() {}
-DisplaySystem::~DisplaySystem() {}
+Display::Display() {}
+Display::~Display() {}
 
 // -----------------------------------------------------------------------------
 // Initialization / Termination
 // -----------------------------------------------------------------------------
 
-void DisplaySystem::initialize(const Config& config) {
+void Display::initialize(const Config& config) {
     spdlog::info("Initializing {}.", TAG);
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     // TODO: support flags (fullscreen etc.)
@@ -30,7 +31,7 @@ void DisplaySystem::initialize(const Config& config) {
     }
 }
 
-void DisplaySystem::terminate() {
+void Display::terminate() {
     spdlog::info("Terminating {}.", TAG);
     SDL_DestroyWindow(window);
     SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
@@ -41,15 +42,15 @@ void DisplaySystem::terminate() {
 // -----------------------------------------------------------------------------
 
 // Return singleton.
-DisplaySystem& DisplaySystem::getMutable() {
-    static DisplaySystem instance{};
+Display& Display::getMutable() {
+    static Display instance{};
     return instance;
 }
 
-const DisplaySystem& DisplaySystem::get() { return getMutable(); }
+const Display& Display::get() { return getMutable(); }
 
 // -----------------------------------------------------------------------------
 // Event Handling
 // -----------------------------------------------------------------------------
 
-void DisplaySystem::processEvent(const SDL_Event& event) { (void)event; }
+void Display::processEvent(const SDL_Event& event) { (void)event; }

@@ -5,9 +5,8 @@
 #include "SDL_scancode.h"
 
 #include "game.h"
-#include "game/collision_system.h"
 #include "game/entities/paddle.h"
-#include "game/input_system.h"
+#include "game/input_bus.h"
 
 // NOTE: A little bit of pointer chasing is OK for a game this small
 
@@ -58,48 +57,32 @@ Game::Game(const App::Config& config)
     // Sub-system Intitialization
     // ---------------------------------
 
-    // --- Collision System
-    CollisionSystem::get().initialize(
-        // on Left Goal
-        [this]() {
-            ++leftScore;
-            next();
-        },
-        // on Right Goal
-        [this]() {
-            ++rightScore;
-            next();
-        });
-
     // --- Input System
     {
-        InputSystem& input{InputSystem::get()};
-        InputSystem::Config config;
-        config.setKeyboardKeyDownAction(SDL_SCANCODE_A,
-                                        InputSystem::Action::playerOneUp);
+        InputBus& input{InputBus::get()};
+        InputBus::Config config;
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_A, InputBus::Action::playerOneUp);
         config.setKeyboardKeyDownAction(SDL_SCANCODE_Z,
-                                        InputSystem::Action::playerOneDown);
-        config.setKeyboardKeyDownAction(SDL_SCANCODE_K,
-                                        InputSystem::Action::playerTwoUp);
+                                        InputBus::Action::playerOneDown);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_K, InputBus::Action::playerTwoUp);
         config.setKeyboardKeyDownAction(SDL_SCANCODE_M,
-                                        InputSystem::Action::playerTwoDown);
-        config.setKeyboardKeyDownAction(SDL_SCANCODE_RETURN,
-                                        InputSystem::Action::confirm);
+                                        InputBus::Action::playerTwoDown);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_RETURN, InputBus::Action::confirm);
         config.setKeyboardKeyDownAction(SDL_SCANCODE_BACKSPACE,
-                                        InputSystem::Action::cancel);
-        config.setKeyboardKeyDownAction(SDL_SCANCODE_Q, InputSystem::Action::quit);
+                                        InputBus::Action::cancel);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_Q, InputBus::Action::quit);
 
         input.initialize(config);
 
-        actionSubscription = input.onActionPressed([this](InputSystem::Action action) {
+        actionSubscription = input.onActionPressed([this](InputBus::Action action) {
             switch (action) {
-            case InputSystem::Action::quit:
+            case InputBus::Action::quit:
                 stop();
                 return;
-            case InputSystem::Action::pause:
+            case InputBus::Action::pause:
                 pause();
                 return;
-            case InputSystem::Action::confirm:
+            case InputBus::Action::confirm:
                 confirm();
                 return;
             default:
@@ -177,7 +160,7 @@ Game::Game(const App::Config& config)
     playingState.enter        = []() {};
     playingState.exit         = []() {};
     playingState.processFrame = [this](const float delta) {
-        static const RenderingSystem& render{RenderingSystem::get()};
+        static const Renderer& render{Renderer::get()};
 
         // --- Update
 
@@ -187,7 +170,7 @@ Game::Game(const App::Config& config)
 
         // --- Collide
 
-        CollisionSystem::get().resolve(field, leftPaddle, rightPaddle, ball);
+        resolveFrameCollisions();
 
         // --- Render
 
@@ -249,7 +232,7 @@ Game::Game(const App::Config& config)
 
 #endif
 }
-Game::~Game() { InputSystem::get().offActionPressed(actionSubscription); }
+Game::~Game() { InputBus::get().offActionPressed(actionSubscription); }
 
 // -----------------------------------------------------------------------------
 // Frame / Event Processing Dispatch
@@ -260,10 +243,10 @@ inline void Game::processEvent(const SDL_Event& event) {
     switch (event.type) {
 
     case SDL_KEYDOWN:
-        InputSystem::get().handleKeyDownEvent(event.key);
+        InputBus::get().handleKeyDownEvent(event.key);
         break;
     case SDL_MOUSEBUTTONDOWN:
-        InputSystem::get().handleMouseButtonDownEvent(event.button);
+        InputBus::get().handleMouseButtonDownEvent(event.button);
         break;
 
     default:
@@ -300,3 +283,63 @@ void Game::next() { transition(currentState->onNext); }
 void Game::confirm() { transition(currentState->onConfirm); }
 void Game::cancel() { transition(currentState->onCancel); }
 void Game::gameOver() { transition(currentState->onGameOver); }
+
+// -----------------------------------------------------------------------------
+// Rules Processing (Collision, Goals, Score, etc)
+// -----------------------------------------------------------------------------
+
+void Game::resolveFrameCollisions() {
+    Paddle& lp{leftPaddle};
+    Paddle& rp{rightPaddle};
+    Ball& b{ball};
+    Rect& f{field};
+
+    // --- Left Paddle & Field
+    if (lp.getTopEdgePosition() < f.y) {
+        lp.setTopEdgePosition(f.y);
+    } else if (lp.getBottomEdgePosition() > f.y + f.h) {
+        lp.setBottomEdgePosition(f.y + f.h);
+    }
+
+    // --- Right Paddle & Field
+    if (rp.getTopEdgePosition() < f.y) {
+        rp.setTopEdgePosition(f.y);
+    } else if (rp.getBottomEdgePosition() > f.y + f.h) {
+        rp.setBottomEdgePosition(f.y + f.h);
+    }
+
+    // --- Ball & Field
+    if (b.getTopEdgePosition() < f.y) {
+        Vector2 v{b.getVelocity()};
+        b.setVelocity(v.x, std::abs(v.y));
+    } else if (b.getBottomEdgePosition() > f.y + f.h) {
+        Vector2 v{b.getVelocity()};
+        b.setVelocity(v.x, -std::abs(v.y));
+    } else if (b.getLeftEdgePosition() < f.x) {
+        handleLeftGoal();
+    } else if (b.getRightEdgePosition() > f.x + f.w) {
+        handleRightGoal();
+    }
+
+    // --- Ball & Left Paddle
+    if ((lp.getRect() - b.getRect()).hasPoint(0, 0)) {
+        Vector2 v{b.getVelocity()};
+        b.setVelocity(std::abs(v.x), v.y);
+    }
+
+    // --- Ball & Right Paddle
+    if ((rp.getRect() - b.getRect()).hasPoint(0, 0)) {
+        Vector2 v{b.getVelocity()};
+        b.setVelocity(-std::abs(v.x), v.y);
+    }
+}
+
+void Game::handleLeftGoal() {
+    ++leftScore;
+    next();
+}
+
+void Game::handleRightGoal() {
+    ++rightScore;
+    next();
+}

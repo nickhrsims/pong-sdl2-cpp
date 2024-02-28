@@ -6,8 +6,8 @@
 #include <SDL_events.h>
 
 #include "asset_system.h"
-#include "display_system.h"
-#include "rendering_system.h"
+#include "display.h"
+#include "renderer.h"
 #include "text_system.h"
 
 class App {
@@ -17,8 +17,8 @@ class App {
      */
     struct Config {
         AssetSystem::Config assetSystemConfig;
-        DisplaySystem::Config displaySystemConfig;
-        RenderingSystem::Config renderingSystemConfig;
+        Display::Config displaySystemConfig;
+        Renderer::Config renderingSystemConfig;
         TextSystem::Config textSystemConfig;
     };
 

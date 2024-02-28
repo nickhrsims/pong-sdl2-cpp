@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rendering_system.h"
+#include "renderer.h"
 
 class TextSystem {
     friend class App;

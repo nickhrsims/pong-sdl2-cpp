@@ -1,7 +1,7 @@
 #pragma once
 
 #include "game/entity.h"
-#include "game/input_system.h"
+#include "game/input_bus.h"
 #include "game/player.h"
 
 class InputComponent {
@@ -12,7 +12,7 @@ class InputComponent {
 
   private:
     Entity* const entity;
-    InputSystem::Action upAction;
-    InputSystem::Action downAction;
+    InputBus::Action upAction;
+    InputBus::Action downAction;
 };
 ;

@@ -5,7 +5,7 @@
 #include "core/app.h"
 #include "entities/ball.h"
 #include "entities/paddle.h"
-#include "input_system.h"
+#include "input_bus.h"
 
 /**
  * A fancy FSM to dispatch `App` control to `Game::State`s.
@@ -56,9 +56,14 @@ class Game : public App {
     unsigned char leftScore{0};
     unsigned char rightScore{0};
 
+    // --- Rules (Collision, Goal, Score, etc.)
+    void handleLeftGoal();
+    void handleRightGoal();
+    void resolveFrameCollisions();
+
     // --- Input
     // Various input-action event subscriptions
-    InputSystem::Subscription actionSubscription;
+    InputBus::Subscription actionSubscription;
 
     // --- State Management
     // States

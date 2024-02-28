@@ -14,8 +14,11 @@ class AssetSystem {
     void terminate();
 
   private:
-    static AssetSystem& getMutable();
+    // ---------------------------------
+    // Asset Index
+    // ---------------------------------
 
+    static AssetSystem& getMutable();
     AssetSystem();
     AssetSystem(const AssetSystem&)            = delete;
     AssetSystem(const AssetSystem&&)           = delete;

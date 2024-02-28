@@ -4,7 +4,7 @@
 
 #include "app.h"
 #include "core/asset_system.h"
-#include "core/rendering_system.h"
+#include "core/renderer.h"
 
 // -----------------------------------------------------------------------------
 // No-Op Construction/Destruction
@@ -13,15 +13,15 @@
 App::App(const Config& config) {
     // --- Initialize Sub-systems
     AssetSystem::getMutable().initialize(config.assetSystemConfig);
-    DisplaySystem::getMutable().initialize(config.displaySystemConfig);
-    RenderingSystem::getMutable().initialize(config.renderingSystemConfig);
+    Display::getMutable().initialize(config.displaySystemConfig);
+    Renderer::getMutable().initialize(config.renderingSystemConfig);
     TextSystem::getMutable().initialize(config.textSystemConfig);
 }
 App::~App() {
     // --- Termiante Sub-systems
     TextSystem::getMutable().terminate();
-    RenderingSystem::getMutable().terminate();
-    DisplaySystem::getMutable().terminate();
+    Renderer::getMutable().terminate();
+    Display::getMutable().terminate();
     AssetSystem::getMutable().terminate();
 
     SDL_Quit();
@@ -112,7 +112,7 @@ void App::dispatchEvent(const SDL_Event& event) {
     switch (event.type) {
     case SDL_DISPLAYEVENT:
     case SDL_WINDOWEVENT:
-        DisplaySystem::getMutable().processEvent(event);
+        Display::getMutable().processEvent(event);
         break;
     case SDL_QUIT:
         stop();

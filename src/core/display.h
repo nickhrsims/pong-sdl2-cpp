@@ -4,11 +4,11 @@
 
 #include <SDL_events.h>
 
-class DisplaySystem {
+class Display {
     friend class App;
 
   public:
-    friend class RenderingSystem;
+    friend class Renderer;
 
     struct Config {
         std::string windowTitle;
@@ -18,9 +18,9 @@ class DisplaySystem {
         unsigned int windowHeight;
     };
 
-    ~DisplaySystem();
+    ~Display();
 
-    static const DisplaySystem& get();
+    static const Display& get();
 
     void initialize(const Config& config);
     void terminate();
@@ -30,10 +30,10 @@ class DisplaySystem {
   private:
     SDL_Window* window;
 
-    static DisplaySystem& getMutable();
+    static Display& getMutable();
 
-    DisplaySystem();
-    DisplaySystem(DisplaySystem&)                  = delete;
-    DisplaySystem(DisplaySystem&&)                 = delete;
-    DisplaySystem& operator=(const DisplaySystem&) = delete;
+    Display();
+    Display(Display&)                  = delete;
+    Display(Display&&)                 = delete;
+    Display& operator=(const Display&) = delete;
 };

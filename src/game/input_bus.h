@@ -8,7 +8,7 @@
 #include <SDL_events.h>
 #include <SDL_scancode.h>
 
-class InputSystem {
+class InputBus {
   public:
     // ---------------------------------
     // Supported Player Actions & Types
@@ -42,7 +42,7 @@ class InputSystem {
     // Subscription Node
     // ---------------------------------
 
-    typedef std::_List_iterator<std::function<void(InputSystem::Action)>> Subscription;
+    typedef std::_List_iterator<std::function<void(InputBus::Action)>> Subscription;
 
     // ---------------------------------
     // Configuration
@@ -51,7 +51,7 @@ class InputSystem {
     // TODO: Separate action map by player.
 
     struct Config {
-        friend InputSystem;
+        friend InputBus;
 
         // It is undefined behavior to assign multiple inputs to the same action.
         // TODO: Consider supporting multiple inputs / input-types per action.
@@ -95,9 +95,9 @@ class InputSystem {
         std::unordered_map<Action, ActionDescription> actionMap;
     };
 
-    ~InputSystem();
+    ~InputBus();
 
-    static InputSystem& get();
+    static InputBus& get();
 
     void initialize(const Config& config);
     void terminate();
@@ -158,9 +158,9 @@ class InputSystem {
 
     // --- Explicitely deleted constructors
 
-    InputSystem();
-    InputSystem(const InputSystem&)             = delete;
-    InputSystem(const InputSystem&&)            = delete;
-    InputSystem& operator=(const InputSystem&)  = delete;
-    InputSystem& operator=(const InputSystem&&) = delete;
+    InputBus();
+    InputBus(const InputBus&)             = delete;
+    InputBus(const InputBus&&)            = delete;
+    InputBus& operator=(const InputBus&)  = delete;
+    InputBus& operator=(const InputBus&&) = delete;
 };

@@ -1,4 +1,4 @@
-#include "core/rendering_system.h"
+#include "core/renderer.h"
 
 #include "direct_render_component.h"
 
@@ -10,5 +10,5 @@ DirectRenderComponent::DirectRenderComponent(Entity* entity, SDL_Color& color)
     : entity{entity}, color{color} {}
 
 void DirectRenderComponent::draw() const {
-    RenderingSystem::get().drawRect(entity->getRect(), color);
+    Renderer::get().drawRect(entity->getRect(), color);
 }
