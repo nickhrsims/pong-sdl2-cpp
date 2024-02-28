@@ -16,18 +16,25 @@
 // -----------------------------------------------------------------------------
 
 Game::Game(const App::Config& config)
-    : App{config}, leftPaddle{Player::one}, rightPaddle{Player::two},
-      currentState{&startState},
+    : App{config},
       field{
           0,
           0,
           static_cast<int>(config.displaySystemConfig.windowWidth),
           static_cast<int>(config.displaySystemConfig.windowHeight),
-      } {
+      },
+      leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
+      currentState{&startState} {
 
     // ---------------------------------
     // Entities
     // ---------------------------------
+
+    // Ball in the center
+    const Vector2 fieldCenter{field.getCenter()};
+    ball.setPosition(fieldCenter.x, fieldCenter.y);
+    // HACK:
+    ball.setVelocity(300, 60);
 
     // How close are the paddles to the walls?
     // (for actual meaning, see `Rect::getVerticalSlice()`)
@@ -135,17 +142,19 @@ Game::Game(const App::Config& config)
 
         // --- Update
 
+        ball.update(delta);
         leftPaddle.update(delta);
         rightPaddle.update(delta);
 
         // --- Collide
 
-        CollisionSystem::resolve(field, leftPaddle, rightPaddle);
+        CollisionSystem::resolve(field, leftPaddle, rightPaddle, ball);
 
         // --- Render
 
         render.clear();
 
+        ball.draw();
         leftPaddle.draw();
         rightPaddle.draw();
 

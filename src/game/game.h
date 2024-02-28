@@ -3,6 +3,7 @@
 #include <string>
 
 #include "core/app.h"
+#include "entities/ball.h"
 #include "entities/paddle.h"
 #include "input_system.h"
 
@@ -47,10 +48,11 @@ class Game : public App {
 
   private:
     // --- Data Members
+    Rect field;
     Paddle leftPaddle;
     Paddle rightPaddle;
+    Ball ball;
     State* currentState;
-    Rect field;
 
     // Various input-action event subscriptions
     InputSystem::Subscription actionSubscription;
