@@ -19,12 +19,12 @@ Game::Game(const App::Config& config)
     : App{config},
       field{
           0,
-          0,
+          16,
           static_cast<int>(config.displaySystemConfig.windowWidth),
-          static_cast<int>(config.displaySystemConfig.windowHeight),
+          static_cast<int>(config.displaySystemConfig.windowHeight - 16),
       },
       leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
-      currentState{&startState} {
+      currentState{&playingState} {
 
     // ---------------------------------
     // Entities
@@ -57,6 +57,19 @@ Game::Game(const App::Config& config)
     // ---------------------------------
     // Sub-system Intitialization
     // ---------------------------------
+
+    // --- Collision System
+    CollisionSystem::get().initialize(
+        // on Left Goal
+        [this]() {
+            ++leftScore;
+            next();
+        },
+        // on Right Goal
+        [this]() {
+            ++rightScore;
+            next();
+        });
 
     // --- Input System
     {
@@ -163,7 +176,29 @@ Game::Game(const App::Config& config)
     // --- Playing
     playingState.enter        = []() {};
     playingState.exit         = []() {};
-    playingState.processFrame = [](const float delta) { (void)delta; };
+    playingState.processFrame = [this](const float delta) {
+        static const RenderingSystem& render{RenderingSystem::get()};
+
+        // --- Update
+
+        ball.update(delta);
+        leftPaddle.update(delta);
+        rightPaddle.update(delta);
+
+        // --- Collide
+
+        CollisionSystem::get().resolve(field, leftPaddle, rightPaddle, ball);
+
+        // --- Render
+
+        render.clear();
+
+        ball.draw();
+        leftPaddle.draw();
+        rightPaddle.draw();
+
+        render.show();
+    };
     playingState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Pause

@@ -53,6 +53,8 @@ class Game : public App {
     Paddle rightPaddle;
     Ball ball;
     State* currentState;
+    unsigned char leftScore{0};
+    unsigned char rightScore{0};
 
     // Various input-action event subscriptions
     InputSystem::Subscription actionSubscription;
