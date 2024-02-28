@@ -135,7 +135,7 @@ Game::Game(const App::Config& config)
     // ---------------------------------
 
     // --- Start
-    startState.enter        = []() {};
+    startState.enter        = []() {}; // always unused
     startState.exit         = []() {};
     startState.processFrame = [](const float delta) { (void)delta; };
     startState.processEvent = [](const SDL_Event& event) { (void)event; };
