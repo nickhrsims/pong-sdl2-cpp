@@ -3,7 +3,7 @@
 #include "core/display.h"
 #include "renderer.h"
 
-static const std::string TAG{"Rendering Sub-system"};
+static const std::string TAG{"Render"};
 
 // -----------------------------------------------------------------------------
 // No-op Constructor / Destructor
