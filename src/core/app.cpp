@@ -16,14 +16,14 @@ App::App(const Config& config) {
     // --- Initialize SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::string errorMessage{SDL_GetError()};
-        spdlog::error("File({}) Line({}): {}", __FILE__, __LINE__, errorMessage);
+        spdlog::error("{}:{} - {}", __FILE__, __LINE__, errorMessage);
         abort();
     }
 
     // --- Initialize SDL TTF
     if (TTF_Init() != 0) {
         std::string errorMessage{TTF_GetError()};
-        spdlog::error("File({}) Line({}): {}", __FILE__, __LINE__, errorMessage);
+        spdlog::error("{}:{} - {}", __FILE__, __LINE__, errorMessage);
         abort();
     }
 
