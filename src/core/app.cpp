@@ -15,7 +15,7 @@ App::App(const Config& config) {
     Renderer::getMutable().initialize(config.renderer);
 }
 App::~App() {
-    // --- Termiante Sub-systems
+    // --- Terminate Sub-systems
     Renderer::getMutable().terminate();
     Display::getMutable().terminate();
 
