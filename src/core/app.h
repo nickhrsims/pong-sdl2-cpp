@@ -5,10 +5,8 @@
 
 #include <SDL_events.h>
 
-#include "asset_system.h"
 #include "display.h"
 #include "renderer.h"
-#include "text_system.h"
 
 class App {
   public:
@@ -16,10 +14,8 @@ class App {
      * Sub-system configuration aggregate.
      */
     struct Config {
-        AssetSystem::Config assetSystemConfig;
-        Display::Config displaySystemConfig;
-        Renderer::Config renderingSystemConfig;
-        TextSystem::Config textSystemConfig;
+        Display::Config display;
+        Renderer::Config renderer;
     };
 
     virtual ~App();

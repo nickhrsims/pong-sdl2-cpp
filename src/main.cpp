@@ -8,16 +8,14 @@ int main(void) {
     spdlog::set_level(spdlog::level::debug);
 
     Game game{{
-        .assetSystemConfig{},
-        .displaySystemConfig{
+        .display{
             .windowTitle     = "Pong SDL2 C++",
             .windowPositionX = 256,
             .windowPositionY = 256,
             .windowWidth     = 256,
             .windowHeight    = 256,
         },
-        .renderingSystemConfig{},
-        .textSystemConfig{},
+        .renderer{},
     }};
 
     game.start();

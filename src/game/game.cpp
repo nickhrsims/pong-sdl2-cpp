@@ -19,8 +19,8 @@ Game::Game(const App::Config& config)
       field{
           0,
           16,
-          static_cast<int>(config.displaySystemConfig.windowWidth),
-          static_cast<int>(config.displaySystemConfig.windowHeight - 16),
+          static_cast<int>(config.display.windowWidth),
+          static_cast<int>(config.display.windowHeight - 16),
       },
       leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
       currentState{&playingState} {

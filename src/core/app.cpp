@@ -3,7 +3,6 @@
 #include <spdlog/spdlog.h>
 
 #include "app.h"
-#include "core/asset_system.h"
 #include "core/renderer.h"
 
 // -----------------------------------------------------------------------------
@@ -12,17 +11,13 @@
 
 App::App(const Config& config) {
     // --- Initialize Sub-systems
-    AssetSystem::getMutable().initialize(config.assetSystemConfig);
-    Display::getMutable().initialize(config.displaySystemConfig);
-    Renderer::getMutable().initialize(config.renderingSystemConfig);
-    TextSystem::getMutable().initialize(config.textSystemConfig);
+    Display::getMutable().initialize(config.display);
+    Renderer::getMutable().initialize(config.renderer);
 }
 App::~App() {
     // --- Termiante Sub-systems
-    TextSystem::getMutable().terminate();
     Renderer::getMutable().terminate();
     Display::getMutable().terminate();
-    AssetSystem::getMutable().terminate();
 
     SDL_Quit();
 }
