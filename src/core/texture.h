@@ -4,11 +4,10 @@
 
 #include "font.h"
 
-class Texture {
-  public:
+struct Texture {
     Texture(SDL_Texture* rawSdlTexture);
     ~Texture();
-
-  private:
     SDL_Texture* data;
+    int w;
+    int h;
 };
