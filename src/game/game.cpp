@@ -159,9 +159,41 @@ Game::Game(const App::Config& config)
     // ---------------------------------
 
     // --- Start
-    startState.enter        = []() {}; // always unused
-    startState.exit         = []() {};
-    startState.processFrame = [](const float delta) { (void)delta; };
+    startState.enter = []() {}; // always unused
+    startState.exit  = [this]() { spdlog::debug("Leaving {} state", startState.tag); };
+    startState.processFrame = [this](const float delta) {
+        // --- Renderer
+        static const Renderer& render{Renderer::get()};
+
+        // --- State Actors
+        // Static
+        static unsigned short const speed{301};
+        static unsigned char alpha{100};
+        static float alphaDirection{speed};
+        // Local
+        Vector2 fieldCenter{field.getCenter()};
+        Texture& texture{stringTextures.at(Game::StringKey::startGame)};
+
+        // --- Animation Update
+        // Bounce Effect
+        if (alpha <= 60) {
+            alphaDirection = speed;
+        } else if (alpha >= 236) {
+            alphaDirection = -speed;
+        }
+        // Animation Driver
+        alpha += alphaDirection * delta;
+
+        texture.setAlpha(alpha);
+
+        // --- Rendering
+        render.clear();
+
+        render.drawTexture(stringTextures.at(Game::StringKey::startGame), fieldCenter.x,
+                           fieldCenter.y);
+
+        render.show();
+    };
     startState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Reset
