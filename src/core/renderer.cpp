@@ -27,6 +27,7 @@ void Renderer::initialize(const Config& config) {
         spdlog::error("{} Error: Renderer create failed!", TAG);
         abort();
     }
+    spdlog::debug("Initialized {} OK!", TAG);
 }
 
 void Renderer::terminate() {
