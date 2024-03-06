@@ -262,13 +262,13 @@ Game::Game(const App::Config& config)
     shutdownState.processFrame = [](const float delta) { (void)delta; };
     shutdownState.processEvent = [](const SDL_Event& event) { (void)event; };
 
-    // ---------------------------------
-    // State Member Assertions (debug)
-    // ---------------------------------
-    // Just check to make sure state->processFrame and state->processEvent
-    // are both defined, these are just pseudo-assertions to make sure I
-    // didn't forget to define anything, they should be removed in release
-    // builds.
+// ---------------------------------
+// State Member Assertions (debug)
+// ---------------------------------
+// Just check to make sure state->processFrame and state->processEvent
+// are both defined, these are just pseudo-assertions to make sure I
+// didn't forget to define anything, they should be removed in release
+// builds.
 #ifndef NDEBUG
     State* debugStateAssertionChecklist[]{
         &startState, &resetState,     &fieldSetupState, &playingState,
@@ -356,39 +356,49 @@ void Game::resolveFrameCollisions() {
 
     // --- Left Paddle & Field
     if (lp.getTopEdgePosition() < f.y) {
+        // Align to top of field
         lp.setTopEdgePosition(f.y);
     } else if (lp.getBottomEdgePosition() > f.y + f.h) {
+        // Align to bottom of field
         lp.setBottomEdgePosition(f.y + f.h);
     }
 
     // --- Right Paddle & Field
     if (rp.getTopEdgePosition() < f.y) {
+        // Aligned to top of field
         rp.setTopEdgePosition(f.y);
     } else if (rp.getBottomEdgePosition() > f.y + f.h) {
+        // Align to bottom of field
         rp.setBottomEdgePosition(f.y + f.h);
     }
 
     // --- Ball & Field
     if (b.getTopEdgePosition() < f.y) {
+        // Bounce
         Vector2 v{b.getVelocity()};
         b.setVelocity(v.x, std::abs(v.y));
     } else if (b.getBottomEdgePosition() > f.y + f.h) {
+        // Bounde
         Vector2 v{b.getVelocity()};
         b.setVelocity(v.x, -std::abs(v.y));
     } else if (b.getLeftEdgePosition() < f.x) {
+        // Delegate field-goal handler
         handleLeftGoal();
     } else if (b.getRightEdgePosition() > f.x + f.w) {
+        // Delegate field-goal handler
         handleRightGoal();
     }
 
     // --- Ball & Left Paddle
     if ((lp.getRect() - b.getRect()).hasPoint(0, 0)) {
+        // Bounce
         Vector2 v{b.getVelocity()};
         b.setVelocity(std::abs(v.x), v.y);
     }
 
     // --- Ball & Right Paddle
     if ((rp.getRect() - b.getRect()).hasPoint(0, 0)) {
+        // Bounce
         Vector2 v{b.getVelocity()};
         b.setVelocity(-std::abs(v.x), v.y);
     }
