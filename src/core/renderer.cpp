@@ -3,7 +3,7 @@
 #include "core/display.h"
 #include "renderer.h"
 
-static const std::string TAG{"Render"};
+static const std::string TAG{"Renderer"};
 
 // -----------------------------------------------------------------------------
 // No-op Constructor / Destructor
