@@ -29,29 +29,34 @@ Game::Game(const App::Config& config)
     // Entities
     // ---------------------------------
 
-    // Ball in the center
-    const Vector2 fieldCenter{field.getCenter()};
-    ball.setPosition(fieldCenter.x, fieldCenter.y);
-    // HACK:
-    ball.setVelocity(300, 60);
+    // ---------------------------------
+    // Entities
+    // ---------------------------------
+    {
+        // Ball in the center
+        const Vector2 fieldCenter{field.getCenter()};
+        ball.setPosition(fieldCenter.x, fieldCenter.y);
+        // HACK:
+        ball.setVelocity(300, 60);
 
-    // How close are the paddles to the walls?
-    // (for actual meaning, see `Rect::getVerticalSlice()`)
-    static const unsigned int fieldSliceRatio{6};
-    // What side of the field?
-    static const unsigned int leftFieldIndex{0};
-    static const unsigned int rightFieldIndex{fieldSliceRatio - 1};
-    // Calculate the center of the left and right "sections" of the field.
-    const Vector2 leftFieldSectionCenter{
-        field.getVerticalSlice(fieldSliceRatio, leftFieldIndex).getCenter()};
-    const Vector2 rightFieldSectionCenter{
-        field.getVerticalSlice(fieldSliceRatio, rightFieldIndex).getCenter()};
+        // How close are the paddles to the walls?
+        // (for actual meaning, see `Rect::getVerticalSlice()`)
+        static const unsigned int fieldSliceRatio{6};
+        // What side of the field?
+        static const unsigned int leftFieldIndex{0};
+        static const unsigned int rightFieldIndex{fieldSliceRatio - 1};
+        // Calculate the center of the left and right "sections" of the field.
+        const Vector2 leftFieldSectionCenter{
+            field.getVerticalSlice(fieldSliceRatio, leftFieldIndex).getCenter()};
+        const Vector2 rightFieldSectionCenter{
+            field.getVerticalSlice(fieldSliceRatio, rightFieldIndex).getCenter()};
 
-    // Left Player Paddle (player 1)
-    leftPaddle.setPosition(leftFieldSectionCenter.x, leftFieldSectionCenter.y);
+        // Left Player Paddle (player 1)
+        leftPaddle.setPosition(leftFieldSectionCenter.x, leftFieldSectionCenter.y);
 
-    // Right Player Paddle (player 2)
-    rightPaddle.setPosition(rightFieldSectionCenter.x, rightFieldSectionCenter.y);
+        // Right Player Paddle (player 2)
+        rightPaddle.setPosition(rightFieldSectionCenter.x, rightFieldSectionCenter.y);
+    }
 
     // ---------------------------------
     // Sub-system Intitialization
