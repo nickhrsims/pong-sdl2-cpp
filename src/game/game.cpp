@@ -23,7 +23,7 @@ Game::Game(const App::Config& config)
           static_cast<int>(config.display.windowHeight),
       },
       leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
-      currentState{&startState}, font{"res/font.ttf", 24} {
+      currentState{&startState}, font{"res/font.ttf", 16} {
 
     // ---------------------------------
     // Strings & Textures
