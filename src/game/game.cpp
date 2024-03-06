@@ -18,9 +18,9 @@ Game::Game(const App::Config& config)
     : App{config},
       field{
           0,
-          16,
+          0,
           static_cast<int>(config.display.windowWidth),
-          static_cast<int>(config.display.windowHeight - 16),
+          static_cast<int>(config.display.windowHeight),
       },
       leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
       currentState{&playingState}, font{"res/font.ttf", 24} {
