@@ -1,7 +1,14 @@
-#include "font.h"
-#include "SDL_ttf.h"
+#include <spdlog/spdlog.h>
 
-Font::Font(const std::string path, const int size) { TTF_OpenFont(path.c_str(), size); }
+#include "font.h"
+
+Font::Font(const std::string path, const int size)
+    : data{TTF_OpenFont(path.c_str(), size)} {
+    if (!data) {
+        spdlog::error("Cannot create Font object: {}", TTF_GetError());
+        abort();
+    }
+}
 Font::~Font() { TTF_CloseFont(data); }
 
 Font::Font(Font&& other) {
