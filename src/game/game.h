@@ -47,6 +47,13 @@ class Game : public App {
     void processEvent(const SDL_Event& event) override;
 
   private:
+    // --- Types
+    /**
+     * Symbolic reference support for associating game-specific
+     * strings and textures.
+     */
+    enum class StringKey { startGame, gameOver, go };
+
     // --- Data Members
     Rect field;
     Paddle leftPaddle;
@@ -56,6 +63,10 @@ class Game : public App {
     unsigned char leftScore{0};
     unsigned char rightScore{0};
     Font font;
+
+    std::unordered_map<StringKey, std::string> stringValues;
+    std::unordered_map<StringKey, Texture> stringTextures;
+    std::vector<Texture> numberTextures;
 
     // --- Rules (Collision, Goal, Score, etc.)
     void handleLeftGoal();
