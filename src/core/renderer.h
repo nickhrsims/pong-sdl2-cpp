@@ -4,6 +4,8 @@
 #include "SDL_render.h"
 
 #include "display.h"
+#include "font.h"
+#include "texture.h"
 
 class Renderer {
     friend class App;
@@ -21,6 +23,9 @@ class Renderer {
     void clear() const;
     void show() const;
     void drawRect(const SDL_Rect& rect, const SDL_Color& color) const;
+    void drawTexture(const Texture& texture, int x, int y) const;
+    Texture loadTexture(const Font& font, const std::string& text,
+                        const SDL_Color& color) const;
 
   private:
     SDL_Renderer* renderer;
