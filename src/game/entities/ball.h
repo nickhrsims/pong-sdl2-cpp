@@ -9,6 +9,10 @@ class Ball : public Entity {
     void update(float delta) override;
     void draw() const override;
 
+    void randomizeVelocity();
+
   private:
     const DirectRenderComponent renderComponent;
+    double speed{0};
+    static const int defaultSpeed{300};
 };
