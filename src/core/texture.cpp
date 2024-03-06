@@ -1,5 +1,7 @@
 #include <string>
 
+#include <spdlog/spdlog.h>
+
 #include "texture.h"
 
 // -----------------------------------------------------------------------------
@@ -9,6 +11,11 @@
 Texture::~Texture() { SDL_DestroyTexture(data); }
 
 Texture::Texture(SDL_Texture* rawSdlTexture) : data{rawSdlTexture} {
+    if (!data) {
+        spdlog::error("Cannot create Texture object: {}", SDL_GetError());
+        abort();
+    }
+
     SDL_QueryTexture(rawSdlTexture, NULL, NULL, &w, &h);
 }
 
