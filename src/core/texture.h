@@ -14,7 +14,11 @@ struct Texture {
     Texture(const Texture&)            = delete;
     Texture& operator=(const Texture&) = delete;
 
-    // --- Members
+    // --- Member Functions
+    void setAlpha(unsigned char alpha);
+    void resetAlpha();
+
+    // --- Data Members
     SDL_Texture* data;
     int w;
     int h;

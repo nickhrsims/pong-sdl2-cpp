@@ -33,3 +33,10 @@ Texture& Texture::operator=(Texture&& other) {
     other.data = nullptr;
     return *this;
 }
+
+// -----------------------------------------------------------------------------
+// Public API
+// -----------------------------------------------------------------------------
+
+void Texture::setAlpha(unsigned char alpha) { SDL_SetTextureAlphaMod(data, alpha); }
+void Texture::resetAlpha() { setAlpha(255); }
