@@ -319,16 +319,16 @@ inline void Game::processEvent(const SDL_Event& event) {
 // Trigger-to-State Dispatch
 // -----------------------------------------------------------------------------
 
-void Game::transition(State* next) {
-    // If `next` is defined (a transition exists for the proved event)
+void Game::transition(State* target) {
+    // If `target` is defined (a transition exists for the proved event)
     // - see specific event callers for example.
-    if (next) {
+    if (target) {
         // Call the exit handler of the old state, if the handler exists
         if (currentState->exit) {
             currentState->exit();
         }
-        // Transition to the next state provided by the caller
-        currentState = next;
+        // Transition to the target state provided by the caller
+        currentState = target;
         // Call the enter handler of the new state, if the handler exists
         if (currentState->enter) {
             currentState->enter();
