@@ -55,6 +55,7 @@ class Game : public App {
     State* currentState;
     unsigned char leftScore{0};
     unsigned char rightScore{0};
+    Font font;
 
     // --- Rules (Collision, Goal, Score, etc.)
     void handleLeftGoal();

@@ -23,7 +23,7 @@ Game::Game(const App::Config& config)
           static_cast<int>(config.display.windowHeight - 16),
       },
       leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
-      currentState{&playingState} {
+      currentState{&playingState}, font{"res/font.ttf", 24} {
 
     // ---------------------------------
     // Entities
