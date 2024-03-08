@@ -196,7 +196,11 @@ Game::Game(const App::Config& config)
     startState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Reset
-    resetState.enter        = []() {};
+    resetState.enter = [this]() {
+        leftScore  = 0;
+        rightScore = 0;
+        next();
+    };
     resetState.exit         = []() {};
     resetState.processFrame = [](const float delta) { (void)delta; };
     resetState.processEvent = [](const SDL_Event& event) { (void)event; };
