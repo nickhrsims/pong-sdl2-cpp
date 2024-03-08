@@ -322,6 +322,14 @@ inline void Game::processEvent(const SDL_Event& event) {
 // Trigger-to-State Dispatch
 // -----------------------------------------------------------------------------
 
+// TODO: Schedule these rather than doing them immediately
+//
+// NOTE: Possible solution strategy
+// - Refactor this into `handleTransition`, and implement `scheduleTransition`
+// - the pushes a custom SDL2 Event onto the global event queue. Let the event
+// - propogate down into the `Game` event processor, then dispatch to
+// - `handleTransition` which receives exiting and entering states as arguments
+// - passed from the event data.
 void Game::transition(State* target) {
     // If `target` is defined (a transition exists for the proved event)
     // - see specific event callers for example.
