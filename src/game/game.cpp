@@ -59,8 +59,7 @@ Game::Game(const App::Config& config)
         // Ball in the center
         const Vector2 fieldCenter{field.getCenter()};
         ball.setPosition(fieldCenter.x, fieldCenter.y);
-        // HACK:
-        ball.setVelocity(300, 60);
+        ball.setVelocity(0, 0);
 
         // How close are the paddles to the walls?
         // (for actual meaning, see `Rect::getVerticalSlice()`)
