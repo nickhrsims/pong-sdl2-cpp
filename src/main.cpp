@@ -8,6 +8,7 @@ int main(void) {
     spdlog::set_level(spdlog::level::debug);
 
     Game game{{
+        .headless = false,
         .display{
             .windowTitle     = "Pong SDL2 C++",
             .windowPositionX = 256,

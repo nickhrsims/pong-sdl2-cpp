@@ -213,16 +213,101 @@ Game::Game(const App::Config& config)
     resetState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Countdown
-    countdownState.enter        = []() {};
-    countdownState.exit         = []() {};
-    countdownState.processFrame = [](const float delta) { (void)delta; };
+    // TODO: Provided a context object mechanism
+
+    countdownState.enter = [this]() {
+        spdlog::debug("Entering {} state", countdownState.tag);
+    };
+    countdownState.exit = [this]() {
+        spdlog::debug("Leaving {} state", countdownState.tag);
+    };
+    countdownState.processFrame = [this](const float delta) {
+        // --- Ignore unused delta
+        (void)delta;
+        // --- Renderer
+        static const Renderer& renderer{Renderer::get()};
+        // --- State Actors
+        // Static
+        static bool isActive                = false;
+        static unsigned long long prevTicks = 0;
+        static unsigned long long currTicks = 0;
+        static char counter                 = 0;
+        static std::vector<Texture*> textures{{
+            &stringTextures.at(StringKey::go),
+            &numberTextures.at(1),
+            &numberTextures.at(2),
+            &numberTextures.at(3),
+        }};
+        // Local
+        Vector2 fieldCenter{field.getCenter()};
+        // --- Auxiliary Functors
+        static auto setup = []() {
+            isActive  = true;
+            prevTicks = SDL_GetTicks64();
+            counter   = 3;
+        };
+        static auto teardown = [this]() {
+            isActive = false;
+            next();
+        };
+        static auto isTimerHit = []() { return currTicks - prevTicks >= 600; };
+        static auto onTimerHit = []() {
+            --counter;
+            prevTicks = currTicks;
+        };
+
+        // --- Animation Update
+        currTicks = SDL_GetTicks64();
+
+        // --- If just starting (again), do setup
+        if (!isActive) {
+            setup();
+        }
+
+        // --- If delay timer interval hit
+        if (isTimerHit()) {
+            // If counter is done, teardown and end
+            if (counter == 0) {
+                teardown();
+                return;
+            }
+
+            // Handle normal timer-hit operator
+            onTimerHit();
+        }
+
+        // --- Rendering
+        renderer.clear();
+
+        // Draw paddles for "visual effect"
+        leftPaddle.draw();
+        rightPaddle.draw();
+
+        // NOTE: fix it so the ball doesn't render just before this.
+        renderer.drawTexture(*textures[counter], fieldCenter.x, fieldCenter.y);
+
+        //        draw_scores(app->video);
+        //      draw_entities(app->video, 2, (entity_t* [2]){&left_paddle,
+        //      &right_paddle});
+        //    draw_dimmer(app->video);
+        //  video_draw_text_with_color(app->video, map[counter], field.x + (field.w
+        //  / 2),
+        //                           field.y + (field.h / 2), 255, 255, 255, 240);
+        renderer.show();
+    };
     countdownState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Field Setup
-    fieldSetupState.enter = []() {
-
+    fieldSetupState.enter = [this]() {
+        spdlog::debug("Entered {} state", fieldSetupState.tag);
+        Vector2 fieldCenter{field.getCenter()};
+        ball.setPosition(fieldCenter.x, fieldCenter.y);
+        ball.randomizeVelocity();
+        next();
     };
-    fieldSetupState.exit         = []() {};
+    fieldSetupState.exit = [this]() {
+        spdlog::debug("Leaving {} state", fieldSetupState.tag);
+    };
     fieldSetupState.processFrame = [](const float delta) { (void)delta; };
     fieldSetupState.processEvent = [](const SDL_Event& event) { (void)event; };
 
@@ -344,7 +429,16 @@ inline void Game::processEvent(const SDL_Event& event) {
 // - propogate down into the `Game` event processor, then dispatch to
 // - `handleTransition` which receives exiting and entering states as arguments
 // - passed from the event data.
-void Game::transition(State* target) {
+void Game::scheduleTransition(State* target) {
+    SDL_Event event;
+    SDL_zero(event);
+    event.user.type =
+        identityEvent + static_cast<uint32_t>(EventType::transitionRequestEvent);
+    event.user.data1 = target;
+    SDL_PushEvent(&event);
+}
+
+void Game::handleTransition(State* target) {
     // If `target` is defined (a transition exists for the proved event)
     // - see specific event callers for example.
     if (target) {
@@ -361,13 +455,13 @@ void Game::transition(State* target) {
     }
 }
 
-void Game::done() { transition(currentState->onDone); }
-void Game::quit() { transition(currentState->onQuit); }
-void Game::pause() { transition(currentState->onPause); }
-void Game::next() { transition(currentState->onNext); }
-void Game::confirm() { transition(currentState->onConfirm); }
-void Game::cancel() { transition(currentState->onCancel); }
-void Game::gameOver() { transition(currentState->onGameOver); }
+void Game::done() { scheduleTransition(currentState->onDone); }
+void Game::quit() { scheduleTransition(currentState->onQuit); }
+void Game::pause() { scheduleTransition(currentState->onPause); }
+void Game::next() { scheduleTransition(currentState->onNext); }
+void Game::confirm() { scheduleTransition(currentState->onConfirm); }
+void Game::cancel() { scheduleTransition(currentState->onCancel); }
+void Game::gameOver() { scheduleTransition(currentState->onGameOver); }
 
 // -----------------------------------------------------------------------------
 // Rules Processing (Collision, Goals, Score, etc)

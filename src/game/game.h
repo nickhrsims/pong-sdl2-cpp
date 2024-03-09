@@ -12,6 +12,12 @@
  */
 class Game : public App {
   public:
+    enum class EventType {
+        firstEvent, ///< Do not use.
+        transitionRequestEvent,
+        lastEvent, ///< Do not use.
+    };
+
     struct State {
         State(const std::string tag) : tag{tag} {};
         const std::string tag;
