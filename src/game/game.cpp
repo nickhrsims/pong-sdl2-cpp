@@ -26,6 +26,13 @@ Game::Game(const App::Config& config)
       currentState{&startState}, font{"res/font.ttf", 16} {
 
     // ---------------------------------
+    // Event Management
+    // ---------------------------------
+
+    // Register events and store the identity.
+    identityEvent = SDL_RegisterEvents((int)EventType::lastEvent);
+
+    // ---------------------------------
     // Strings & Textures
     // ---------------------------------
     {
@@ -303,17 +310,24 @@ Game::~Game() { InputBus::get().offActionPressed(actionSubscription); }
 
 inline void Game::processFrame(const float delta) { currentState->processFrame(delta); }
 inline void Game::processEvent(const SDL_Event& event) {
+    // Primary switch for system events.
     switch (event.type) {
-
     case SDL_KEYDOWN:
         InputBus::get().handleKeyDownEvent(event.key);
         break;
     case SDL_MOUSEBUTTONDOWN:
         InputBus::get().handleMouseButtonDownEvent(event.button);
         break;
-
     default:
-        currentState->processEvent(event);
+        // Nested switch for user events.
+        switch (event.type - identityEvent) {
+        case static_cast<uint32_t>(EventType::transitionRequestEvent):
+            handleTransition(static_cast<State*>(event.user.data1));
+            break;
+        default:
+            currentState->processEvent(event);
+            break;
+        }
         break;
     }
 }

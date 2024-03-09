@@ -90,7 +90,9 @@ class Game : public App {
 
     // Triggers
     // "Raw" transition handler
-    void transition(State* next);
+    void handleTransition(State* target);
+    // "Dispatch" transition handler
+    void scheduleTransition(State* target);
     // Specific transition dispatch
     void done();
     void quit();
@@ -99,4 +101,7 @@ class Game : public App {
     void confirm();
     void cancel();
     void gameOver();
+
+    // --- Event Management
+    uint32_t identityEvent{0};
 };
