@@ -29,6 +29,13 @@
 class App {
   public:
     /**
+     * Start the `App` instance, executing primary frame/event processing loop.
+     * \sa App::stop
+     */
+    void start();
+
+  protected:
+    /**
      * Sub-system configuration aggregate.
      */
     struct Config {
@@ -76,7 +83,6 @@ class App {
      */
     virtual void processEvent(const SDL_Event& event) = 0;
 
-  protected:
     App(const Config& config);
 
   private:
