@@ -53,12 +53,6 @@ class App {
     App& operator=(const App&&) = delete;
 
     /**
-     * Start the `App` instance, executing primary frame/event processing loop.
-     * \sa App::stop
-     */
-    void start();
-
-    /**
      * Stop a previously started (and still running) `App`.
      * Does nothing if app has not been started (and/or is not running).
      *
