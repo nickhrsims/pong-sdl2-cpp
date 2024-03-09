@@ -33,15 +33,23 @@ cloveunit = dependency('clove-unit', version : '2.4.1')
 ### Primary Build Target
 ### ----------------------------------------------------------------------------
 
+core_sources = [
+    'src/core/app.cpp',
+    'src/core/display.cpp',
+    'src/core/renderer.cpp',
+    'src/core/vector2.cpp',
+    'src/core/rect.cpp',
+    'src/core/texture.cpp',
+    'src/core/font.cpp',
+]
+
+core_deps = [
+    sdl2, sdl2_ttf, spdlog
+]
+
 exe = executable('pong',
                 'src/main.cpp',
-                'src/core/app.cpp',
-                'src/core/display.cpp',
-                'src/core/renderer.cpp',
-                'src/core/vector2.cpp',
-                'src/core/rect.cpp',
-                'src/core/texture.cpp',
-                'src/core/font.cpp',
+                core_sources,
                 'src/game/game.cpp',
                 'src/game/entity.cpp',
                 'src/game/input_bus.cpp',
@@ -52,4 +60,13 @@ exe = executable('pong',
                  install : false,
                  include_directories : ['src'],
                  dependencies : [ sdl2, sdl2_ttf, spdlog, cloveunit, cmath ],
-                 )
+)
+
+test('Core / App / Single Object Rule',
+     executable('test-app-single_object',
+                'src/core/tests/app.single_object.cpp',
+                core_sources,
+                include_directories : ['src'],
+                dependencies : core_deps
+     )
+)

@@ -11,7 +11,33 @@
 // No-Op Construction/Destruction
 // -----------------------------------------------------------------------------
 
+/** Enforce single-object rule without global singleton. */
+static bool isAppConstructed{false};
+
 App::App(const Config& config) {
+    // --- Enforce single-construction.
+    // Do not throw exception! No catching around this rule!
+    if (isAppConstructed) {
+        spdlog::error("Multiple `App` objects are not allowed! "
+                      "(Was more than one App created somewhere?)");
+        abort();
+    }
+
+    // Set construction flag
+    isAppConstructed = true;
+
+    // --- Headless Mode
+    if (config.headless) {
+        spdlog::warn("Initializing App in Headless Mode! "
+                     "(No Video, Audio, Input, or Font systems will be available!)");
+        // Headless application may still use timers and event bus!
+        if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_TIMER) != 0) {
+            std::string errorMessage{SDL_GetError()};
+            spdlog::error("{}:{} - {}", __FILE__, __LINE__, errorMessage);
+            abort();
+        }
+        return;
+    }
 
     // --- Initialize SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {

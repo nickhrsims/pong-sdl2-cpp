@@ -14,6 +14,7 @@ class App {
      * Sub-system configuration aggregate.
      */
     struct Config {
+        bool headless;
         Display::Config display;
         Renderer::Config renderer;
     };
