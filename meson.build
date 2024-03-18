@@ -41,6 +41,7 @@ core_sources = [
     'src/core/rect.cpp',
     'src/core/texture.cpp',
     'src/core/font.cpp',
+    'src/core/color.cpp',
 ]
 
 core_deps = [
