@@ -5,6 +5,7 @@
 #include "core/app.h"
 #include "entities/ball.h"
 #include "entities/paddle.h"
+#include "entities/score.h"
 #include "input_bus.h"
 
 /**
@@ -64,10 +65,14 @@ class Game : public App {
     Paddle rightPaddle;
     Ball ball;
     State* currentState;
-    unsigned char leftScore{0};
-    unsigned char rightScore{0};
     Font font;
+    Score leftScore;
+    Score rightScore;
 
+    // --- Static Members
+    static const Score::ValueType maxScore{6};
+
+    // --- Texture Lookup Tables
     std::unordered_map<StringKey, std::string> stringValues;
     std::unordered_map<StringKey, Texture> stringTextures;
     std::vector<Texture> numberTextures;

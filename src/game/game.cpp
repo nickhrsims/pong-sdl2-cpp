@@ -23,7 +23,9 @@ Game::Game(const App::Config& config)
           static_cast<int>(config.display.windowHeight),
       },
       leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
-      currentState{&startState}, font{"res/font.ttf", 16} {
+      currentState{&startState}, font{"res/font.ttf", 16},
+      leftScore{{.font = font, .max = Game::maxScore}},
+      rightScore{{.font = font, .max = Game::maxScore}} {
 
     // ---------------------------------
     // Event Management
@@ -85,6 +87,12 @@ Game::Game(const App::Config& config)
 
         // Right Player Paddle (player 2)
         rightPaddle.setPosition(rightFieldSectionCenter.x, rightFieldSectionCenter.y);
+
+        // Left Score
+        leftScore.setPosition(leftFieldSectionCenter.x, field.h / 6);
+
+        // Right Score
+        rightScore.setPosition(rightFieldSectionCenter.x, field.h / 6);
     }
 
     // ---------------------------------
@@ -204,8 +212,8 @@ Game::Game(const App::Config& config)
 
     // --- Reset
     resetState.enter = [this]() {
-        leftScore  = 0;
-        rightScore = 0;
+        leftScore.reset();
+        rightScore.reset();
         next();
     };
     resetState.exit         = []() {};
@@ -282,6 +290,8 @@ Game::Game(const App::Config& config)
         // Draw paddles for "visual effect"
         leftPaddle.draw();
         rightPaddle.draw();
+        leftScore.draw();
+        rightScore.draw();
 
         // NOTE: fix it so the ball doesn't render just before this.
         renderer.drawTexture(*textures[counter], fieldCenter.x, fieldCenter.y);
@@ -334,6 +344,8 @@ Game::Game(const App::Config& config)
         ball.draw();
         leftPaddle.draw();
         rightPaddle.draw();
+        leftScore.draw();
+        rightScore.draw();
 
         render.show();
     };
@@ -524,11 +536,11 @@ void Game::resolveFrameCollisions() {
 }
 
 void Game::handleLeftGoal() {
-    ++leftScore;
+    leftScore.increment();
     next();
 }
 
 void Game::handleRightGoal() {
-    ++rightScore;
+    rightScore.increment();
     next();
 }
