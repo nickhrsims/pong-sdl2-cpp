@@ -11,7 +11,6 @@
  * A fancy FSM to dispatch `App` control to `Game::State`s.
  */
 class Game : public App {
-  public:
     enum class EventType {
         firstEvent, ///< Do not use.
         transitionRequestEvent,
@@ -39,8 +38,7 @@ class Game : public App {
         State* onGameOver{nullptr};
     };
 
-    friend State;
-
+  public:
     Game(const App::Config& config);
     ~Game() override;
 
