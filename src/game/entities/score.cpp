@@ -15,7 +15,7 @@ Score::Score(const Params params)
     : max{params.max}, textures{createIntegerTextureVector(params.font, params.max)} {}
 
 // -----------------------------------------------------------------------------
-// Public API
+// Entity Overrides
 // -----------------------------------------------------------------------------
 
 void Score::draw() const {
@@ -23,6 +23,10 @@ void Score::draw() const {
     Vector2 pos{getPosition()};
     renderer.drawTexture(textures[value], pos.x, pos.y);
 }
+
+// -----------------------------------------------------------------------------
+// Public API
+// -----------------------------------------------------------------------------
 
 // TODO: Send to log
 void Score::increment() {
