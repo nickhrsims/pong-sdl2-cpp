@@ -1,17 +1,18 @@
 # Decision 0006 - Abstract SDL2 Events
 
+## Motivation
+
+This decision has been updated post-implementation-testing of a global event bus.
+
+Ultimately, the event bus is not likely to bring and benefit except preventing
+anything except the `Game` object from utilizing custom events.
+
+Use of events for "general communication" quickly showed awkwardness. The event
+bus will probably be a YAGNI situation soon.
+
 ## History
 
-### Version 1 (Overturned)
-
-- Decision :: Do not wrap SDL2 Events
-
-- Reason ::
-  SDL2 is an integral part of the underpinning systems, what might be called the
-  "engine" (however small). It is very likely that an SDL2 wrapper would look
-  much like the existing SDL_Event union as it is now.
-
-## Motivation
+### Version 2 (Overturned)
 
 The event system has seen more use throughout the program, and opportunities to
 simplify other abstractions are available should the SDL2 event bus concept be
@@ -55,3 +56,12 @@ Examples
     the Game object itself registered the event, and dispatches it internally.
 
     etc. etc.
+
+### Version 1 (Overturned)
+
+- Decision :: Do not wrap SDL2 Events
+
+- Reason ::
+  SDL2 is an integral part of the underpinning systems, what might be called the
+  "engine" (however small). It is very likely that an SDL2 wrapper would look
+  much like the existing SDL_Event union as it is now.
