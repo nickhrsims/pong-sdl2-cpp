@@ -3,11 +3,11 @@
 #include <string>
 
 #include "core/app.h"
-#include "entities/ball.h"
-#include "entities/main_menu.h"
-#include "entities/paddle.h"
-#include "entities/score.h"
-#include "input_bus.h"
+#include "game/entities/ball.h"
+#include "game/entities/main_menu.h"
+#include "game/entities/paddle.h"
+#include "game/entities/score.h"
+#include "game/input_bus.h"
 
 /**
  * A fancy FSM to dispatch `App` control to `Game::State`s.
