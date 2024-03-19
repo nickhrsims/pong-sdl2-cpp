@@ -3,6 +3,7 @@
 #include <string>
 
 #include "core/app.h"
+#include "core/event_bus.h"
 #include "game/entities/ball.h"
 #include "game/entities/main_menu.h"
 #include "game/entities/paddle.h"
@@ -13,9 +14,9 @@
  * A fancy FSM to dispatch `App` control to `Game::State`s.
  */
 class Game : public App {
-    enum class EventType {
+    enum FsmEventType : uint32_t {
         firstEvent, ///< Do not use.
-        transitionRequestEvent,
+        fsmTransitionRequestEvent,
         lastEvent, ///< Do not use.
     };
 
@@ -114,5 +115,5 @@ class Game : public App {
     void gameOver();
 
     // --- Event Management
-    uint32_t identityEvent{0};
+    EventBus::Domain fsmEventDomain;
 };

@@ -7,7 +7,6 @@
 #include "game.h"
 #include "game/entities/main_menu.h"
 #include "game/entities/paddle.h"
-#include "game/input_bus.h"
 
 // NOTE: A little bit of pointer chasing is OK for a game this small
 
@@ -26,14 +25,8 @@ Game::Game(const App::Config& config)
       leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
       currentState{&startState}, font{"res/font.ttf", 16},
       leftScore{{.font = font, .max = Game::maxScore}},
-      rightScore{{.font = font, .max = Game::maxScore}}, mainMenu{{.font = font}} {
-
-    // ---------------------------------
-    // Event Management
-    // ---------------------------------
-
-    // Register events and store the identity.
-    identityEvent = SDL_RegisterEvents((int)EventType::lastEvent);
+      rightScore{{.font = font, .max = Game::maxScore}}, mainMenu{{.font = font}},
+      fsmEventDomain{EventBus::registerDomain(FsmEventType::lastEvent)} {
 
     // ---------------------------------
     // Strings & Textures
@@ -403,8 +396,8 @@ inline void Game::processEvent(const SDL_Event& event) {
         break;
     default:
         // Nested switch for user events.
-        switch (event.type - identityEvent) {
-        case static_cast<uint32_t>(EventType::transitionRequestEvent):
+        switch (fsmEventDomain.rawToDomain(event.type)) {
+        case FsmEventType::fsmTransitionRequestEvent:
             handleTransition(static_cast<State*>(event.user.data1));
             break;
         default:
@@ -421,12 +414,7 @@ inline void Game::processEvent(const SDL_Event& event) {
 
 // TODO: Generalize Event Bus
 void Game::scheduleTransition(State* target) {
-    SDL_Event event;
-    SDL_zero(event);
-    event.user.type =
-        identityEvent + static_cast<uint32_t>(EventType::transitionRequestEvent);
-    event.user.data1 = target;
-    SDL_PushEvent(&event);
+    EventBus::push(fsmEventDomain, FsmEventType::fsmTransitionRequestEvent, target);
 }
 
 void Game::handleTransition(State* target) {
@@ -458,6 +446,8 @@ void Game::gameOver() { scheduleTransition(currentState->onGameOver); }
 // Rules Processing (Collision, Goals, Score, etc)
 // -----------------------------------------------------------------------------
 
+// TODO: Generalize Physics Processing
+// NOTE: Overturn decision 0008.
 void Game::resolveFrameCollisions() {
     Paddle& lp{leftPaddle};
     Paddle& rp{rightPaddle};

@@ -37,6 +37,7 @@ core_sources = [
     'src/core/app.cpp',
     'src/core/display.cpp',
     'src/core/renderer.cpp',
+    'src/core/event_bus.cpp',
     'src/core/vector2.cpp',
     'src/core/rect.cpp',
     'src/core/texture.cpp',
