@@ -419,6 +419,7 @@ inline void Game::processEvent(const SDL_Event& event) {
 // Trigger-to-State Dispatch
 // -----------------------------------------------------------------------------
 
+// TODO: Generalize Event Bus
 void Game::scheduleTransition(State* target) {
     SDL_Event event;
     SDL_zero(event);
