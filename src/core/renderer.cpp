@@ -7,6 +7,8 @@
 
 static const std::string TAG{"Renderer"};
 
+// TODO: Support texture asset caching (including strings from fonts)
+
 // -----------------------------------------------------------------------------
 // No-op Constructor / Destructor
 // -----------------------------------------------------------------------------
