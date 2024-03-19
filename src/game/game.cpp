@@ -207,7 +207,7 @@ Game::Game(const App::Config& config)
     resetState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Countdown
-    // TODO: Provided a context object mechanism
+    // TODO: Move to Countdown entity
 
     countdownState.enter = [this]() {
         spdlog::debug("Entering {} state", countdownState.tag);
