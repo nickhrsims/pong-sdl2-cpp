@@ -42,6 +42,8 @@ class InputBus {
     // Subscription Node
     // ---------------------------------
 
+    // TODO: Wrap iterator in RAII to auto-unsubscribe on out-of-scope,
+    //       or use custom delete over std::unique_ptr template.
     typedef std::_List_iterator<std::function<void(InputBus::Action)>> Subscription;
 
     // ---------------------------------
