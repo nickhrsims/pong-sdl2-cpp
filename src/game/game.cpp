@@ -5,6 +5,7 @@
 #include "SDL_scancode.h"
 
 #include "game.h"
+#include "game/entities/main_menu.h"
 #include "game/entities/paddle.h"
 #include "game/input_bus.h"
 
@@ -25,7 +26,7 @@ Game::Game(const App::Config& config)
       leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
       currentState{&startState}, font{"res/font.ttf", 16},
       leftScore{{.font = font, .max = Game::maxScore}},
-      rightScore{{.font = font, .max = Game::maxScore}} {
+      rightScore{{.font = font, .max = Game::maxScore}}, mainMenu{{.font = font}} {
 
     // ---------------------------------
     // Event Management
@@ -93,6 +94,12 @@ Game::Game(const App::Config& config)
 
         // Right Score
         rightScore.setPosition(rightFieldSectionCenter.x, field.h / 6);
+
+        // --- Main Menu
+        // Set position to center field
+        mainMenu.setPosition(fieldCenter.x, fieldCenter.y);
+        // Wire MainMenu confirm handler to Game confirm handler.
+        mainMenu.onConfirm([this]() { confirm(); });
     }
 
     // ---------------------------------
@@ -176,37 +183,16 @@ Game::Game(const App::Config& config)
     startState.enter = []() {}; // always unused
     startState.exit  = [this]() { spdlog::debug("Leaving {} state", startState.tag); };
     startState.processFrame = [this](const float delta) {
-        // --- Renderer
-        static const Renderer& render{Renderer::get()};
-
-        // --- State Actors
-        // Static
-        static unsigned short const speed{301};
-        static unsigned char alpha{100};
-        static float alphaDirection{speed};
-        // Local
-        Vector2 fieldCenter{field.getCenter()};
-        Texture& texture{stringTextures.at(Game::StringKey::startGame)};
-
-        // --- Animation Update
-        // Bounce Effect
-        if (alpha <= 60) {
-            alphaDirection = speed;
-        } else if (alpha >= 236) {
-            alphaDirection = -speed;
-        }
-        // Animation Driver
-        alpha += alphaDirection * delta;
-
-        texture.setAlpha(alpha);
+        // --- Update
+        mainMenu.update(delta);
 
         // --- Rendering
-        render.clear();
+        static const Renderer& renderer{Renderer::get()};
+        renderer.clear();
 
-        render.drawTexture(stringTextures.at(Game::StringKey::startGame), fieldCenter.x,
-                           fieldCenter.y);
+        mainMenu.draw();
 
-        render.show();
+        renderer.show();
     };
     startState.processEvent = [](const SDL_Event& event) { (void)event; };
 
