@@ -16,6 +16,8 @@ class EventBus {
      *
      * Represents an abstract grouping of events via. a concrete domain of
      * valid numerical inputs.
+     *
+     * TODO: Refactor Domain to be the "Event Authority" for sending / observering
      */
     struct Domain {
       public:
