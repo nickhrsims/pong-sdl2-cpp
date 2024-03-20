@@ -154,7 +154,7 @@ class InputBus {
     static const uint8_t mouseButtonCount{6};
     Action buttonToActionMap[mouseButtonCount]; // Read note above on magic number `6`
 
-    // --- Observors
+    // --- Observers
 
     std::list<std::function<void(Action action)>> observers;
 
