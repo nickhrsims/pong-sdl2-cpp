@@ -8,6 +8,8 @@
 #include <SDL_events.h>
 #include <SDL_scancode.h>
 
+// TODO: Separate input bus from game-specific actions
+// NOTE: Consider pub-sub with message broker (event channel)
 class InputBus {
   public:
     // ---------------------------------
