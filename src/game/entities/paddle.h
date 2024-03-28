@@ -5,6 +5,7 @@
 #include "game/entity.h"
 #include "game/player.h"
 
+// TODO: Tests
 class Paddle : public Entity {
   public:
     Paddle(Player player);

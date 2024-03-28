@@ -12,6 +12,9 @@
 
 /**
  * A fancy FSM to dispatch `App` control to `Game::State`s.
+ *
+ * TODO: Tests
+ * TODO: Separation of States
  */
 class Game : public App {
     enum FsmEventType : uint32_t {

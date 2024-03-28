@@ -3,6 +3,8 @@
 /**
  * 2-Dimensional Vector.
  * Can be used as a point, velocity, size, etc.
+ *
+ * TODO: Tests
  */
 struct Vector2 {
     int x;

@@ -8,6 +8,7 @@
 #include "game/entity.h"
 #include "game/input_bus.h"
 
+// TODO: Tests
 class MainMenu : public Entity {
   public:
     // --- Types

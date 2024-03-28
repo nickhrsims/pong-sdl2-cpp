@@ -5,6 +5,7 @@
 #include "core/texture.h"
 #include "game/entity.h"
 
+// TODO: Tests
 class Score : public Entity {
   public:
     /** Concrete primitive representing underlying score value */

@@ -2,6 +2,7 @@
 
 #include <SDL_pixels.h>
 
+// TODO: Tests
 namespace Color {
 
 const SDL_Color generate(float r, float b, float g, float a);

@@ -5,13 +5,14 @@
 #include "core/vector2.h"
 
 /**
- *
  * A.k.a "Axis-Aligned Bounding Box", and all that implies.
  *
  * A simple wrapper around SDL_Rect.
  * Rect specialization for position, size, and collision geometry.
  *
  * The "origin" from the perspective of the API is the center of the Rect.
+ *
+ * TODO: Tests
  */
 struct Rect : public SDL_Rect {
     Rect();

@@ -3,6 +3,8 @@
 #include "core/rect.h"
 #include "core/vector2.h"
 
+// TODO: Tests
+// TODO: Docs
 class Entity {
   public:
     /**

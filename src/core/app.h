@@ -25,6 +25,8 @@
  * single object rule is to avoid requiring singletons and ensure no funny
  * violations of encapsulation occur. If something needs access to an App
  * object, it may be a sign that the design is flawed.
+ *
+ * TODO: Smoke tests
  */
 class App {
   public:

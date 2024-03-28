@@ -7,6 +7,7 @@
 #include "font.h"
 #include "texture.h"
 
+// TODO: Tests
 class Renderer {
     friend class App;
 

@@ -6,6 +6,8 @@
 
 /**
  * Global Event Bus.
+ *
+ * TODO: Tests
  */
 class EventBus {
   public:

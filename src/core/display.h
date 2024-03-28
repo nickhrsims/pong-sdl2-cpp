@@ -4,6 +4,8 @@
 
 #include <SDL_events.h>
 
+// TODO: Tests
+// TODO: Docs
 class Display {
     friend class App;
 
