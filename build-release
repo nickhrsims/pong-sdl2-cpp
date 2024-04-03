@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+conan build . -of release -s build_type=Release --build=missing

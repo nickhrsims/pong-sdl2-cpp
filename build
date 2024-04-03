@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+conan build . -of debug -s build_type=Debug --build=missing
