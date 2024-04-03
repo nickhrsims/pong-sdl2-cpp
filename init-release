@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-conan install . -of release -s build_type=Release --build=missing
+conan install . -of build-release -s build_type=Release --build=missing

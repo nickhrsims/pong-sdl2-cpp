@@ -9,7 +9,6 @@ project('pong', 'c', 'cpp',
     'cpp_std=c++20',
     'warning_level=3',
     'b_ndebug=if-release',
-    'buildtype=debug',
   ]
 )
 

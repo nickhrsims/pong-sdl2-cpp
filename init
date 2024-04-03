@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-conan install . -of debug -s build_type=Debug --build=missing
+conan install . -of build -s build_type=Debug --build=missing
