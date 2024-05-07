@@ -14,6 +14,10 @@ class Paddle : public Entity {
     void draw() const override;
 
   private:
+    // NOTE: There is no reason for components to necessarily be types, nor to be
+    //       contrained by the concept "component" borrowed from ECS. This is not
+    //       an ECS implementation, and does not benefit from composing "types"
+    //       that are just "functions in disguise".
     InputComponent inputComponent;
     const DirectRenderComponent renderComponent;
 };

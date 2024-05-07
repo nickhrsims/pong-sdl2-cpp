@@ -3,6 +3,7 @@
 
 static const int SPEED = 400;
 
+// Could easily be replaced by functional equivalent.
 InputComponent::InputComponent(Entity* entity, Player player) : entity{entity} {
     switch (player) {
     case Player::one:
@@ -22,5 +23,6 @@ void InputComponent::update(float delta) const {
     bool up{input.isActionPressed(upAction)};
     bool down{input.isActionPressed(downAction)};
 
+    // Why do this? replace the velocity in a motion function.
     entity->setVelocity(0, (down - up) * SPEED);
 }

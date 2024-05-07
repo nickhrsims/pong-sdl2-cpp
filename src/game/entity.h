@@ -111,6 +111,7 @@ class Entity {
 
     /**
      * Change the entity's position based on it's current velocity.
+     * NOTE: Doesn't belong with entity.
      */
     void move(float delta);
 

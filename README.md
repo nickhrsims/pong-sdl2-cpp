@@ -1,6 +1,6 @@
 # Pong SDL2 C++
 
-Extremely dirty testing ground for testing different game design concepts
+Extremely dirty testing ground for different game design concepts
 (sometimes conflicting) in the same space.
 
 There is no clearly defined architecture, and things may seem at odds. This is
