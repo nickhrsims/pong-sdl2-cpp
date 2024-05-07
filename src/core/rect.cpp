@@ -99,19 +99,3 @@ Rect::Edge Rect::getIntersectingEdge(const Rect& other) const {
 
     return Edge::none; // Not intersecting
 }
-
-Rect Rect::getVerticalSlice(unsigned int ratio, unsigned int index) const {
-    if (index >= ratio) {
-        throw std::invalid_argument("`index` must be less than `ratio`");
-    }
-
-    Rect slice{*this};
-
-    // A "unit width" conforming to a common ratio.
-    slice.w = std::round((float)this->w / ratio);
-
-    // A "unit distance" from the left edge of the rect.
-    slice.x += (index * slice.w);
-
-    return slice;
-}
