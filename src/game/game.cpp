@@ -25,8 +25,7 @@ Game::Game(const App::Config& config)
       leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
       currentState{&startState}, font{"res/font.ttf", 16},
       leftScore{{.font = font, .max = Game::maxScore}},
-      rightScore{{.font = font, .max = Game::maxScore}}, mainMenu{{.font = font}},
-      fsmEventDomain{EventBus::registerDomain(FsmEventType::lastEvent)} {
+      rightScore{{.font = font, .max = Game::maxScore}}, mainMenu{{.font = font}} {
 
     // ---------------------------------
     // Strings & Textures
@@ -372,8 +371,14 @@ Game::~Game() { InputBus::get().offActionPressed(actionSubscription); }
 // Frame / Event Processing Dispatch
 // -----------------------------------------------------------------------------
 
-inline void Game::processFrame(const float delta) { currentState->processFrame(delta); }
-inline void Game::processEvent(const SDL_Event& event) {
+void Game::processFrame(const float delta) {
+    if (!transitionQueue.empty()) {
+        handleTransition(transitionQueue.front());
+        transitionQueue.pop();
+    }
+    currentState->processFrame(delta);
+}
+void Game::processEvent(const SDL_Event& event) {
     // Primary switch for system events.
     switch (event.type) {
     case SDL_KEYDOWN:
@@ -383,15 +388,6 @@ inline void Game::processEvent(const SDL_Event& event) {
         InputBus::get().handleMouseButtonDownEvent(event.button);
         break;
     default:
-        // Nested switch for user events.
-        switch (fsmEventDomain.rawToDomain(event.type)) {
-        case FsmEventType::fsmTransitionRequestEvent:
-            handleTransition(static_cast<State*>(event.user.data1));
-            break;
-        default:
-            currentState->processEvent(event);
-            break;
-        }
         break;
     }
 }
@@ -401,9 +397,7 @@ inline void Game::processEvent(const SDL_Event& event) {
 // -----------------------------------------------------------------------------
 
 // TODO: Generalize Event Bus
-void Game::scheduleTransition(State* target) {
-    EventBus::push(fsmEventDomain, FsmEventType::fsmTransitionRequestEvent, target);
-}
+void Game::scheduleTransition(State* target) { transitionQueue.push(target); }
 
 void Game::handleTransition(State* target) {
     // If `target` is defined (a transition exists for the proved event)

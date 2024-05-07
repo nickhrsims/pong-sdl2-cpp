@@ -1,9 +1,9 @@
 #pragma once
 
+#include <queue>
 #include <string>
 
 #include "core/app.h"
-#include "core/event_bus.h"
 #include "game/entities/ball.h"
 #include "game/entities/main_menu.h"
 #include "game/entities/paddle.h"
@@ -17,12 +17,6 @@
  * TODO: Separation of States
  */
 class Game : public App {
-    enum FsmEventType : uint32_t {
-        firstEvent, ///< Do not use.
-        fsmTransitionRequestEvent,
-        lastEvent, ///< Do not use.
-    };
-
     struct State {
         State(const std::string tag) : tag{tag} {};
         const std::string tag;
@@ -63,6 +57,7 @@ class Game : public App {
      * strings and textures.
      */
     enum class StringKey { startGame, gameOver, go };
+    std::queue<State*> transitionQueue;
 
     // --- Data Members
     Rect field;
@@ -116,7 +111,4 @@ class Game : public App {
     void confirm();
     void cancel();
     void gameOver();
-
-    // --- Event Management
-    EventBus::Domain fsmEventDomain;
 };
