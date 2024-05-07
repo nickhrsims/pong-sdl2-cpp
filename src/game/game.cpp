@@ -59,34 +59,22 @@ Game::Game(const App::Config& config)
     // Entities
     // ---------------------------------
     {
-        // Ball in the center
+        const Vector2 ratio{6, 24};
         const Vector2 fieldCenter{field.getCenter()};
         ball.setPosition(fieldCenter.x, fieldCenter.y);
         ball.setVelocity(0, 0);
 
-        // How close are the paddles to the walls?
-        // (for actual meaning, see `Rect::getVerticalSlice()`)
-        static const unsigned int fieldSliceRatio{6};
-        // What side of the field?
-        static const unsigned int leftFieldIndex{0};
-        static const unsigned int rightFieldIndex{fieldSliceRatio - 1};
-        // Calculate the center of the left and right "sections" of the field.
-        const Vector2 leftFieldSectionCenter{
-            field.getVerticalSlice(fieldSliceRatio, leftFieldIndex).getCenter()};
-        const Vector2 rightFieldSectionCenter{
-            field.getVerticalSlice(fieldSliceRatio, rightFieldIndex).getCenter()};
-
         // Left Player Paddle (player 1)
-        leftPaddle.setPosition(leftFieldSectionCenter.x, leftFieldSectionCenter.y);
+        leftPaddle.setPosition(field.w / ratio.x, fieldCenter.y);
 
         // Right Player Paddle (player 2)
-        rightPaddle.setPosition(rightFieldSectionCenter.x, rightFieldSectionCenter.y);
+        rightPaddle.setPosition(field.w - (field.w / ratio.x), fieldCenter.y);
 
         // Left Score
-        leftScore.setPosition(leftFieldSectionCenter.x, field.h / 6);
+        leftScore.setPosition(fieldCenter.x - (field.w / ratio.x), field.h / ratio.y);
 
         // Right Score
-        rightScore.setPosition(rightFieldSectionCenter.x, field.h / 6);
+        rightScore.setPosition(fieldCenter.x + (field.w / ratio.x), field.h / ratio.y);
 
         // --- Main Menu
         // Set position to center field
