@@ -108,10 +108,10 @@ class InputBus {
     void terminate();
     void reinitialize(const Config& config);
 
-    void handleKeyDownEvent(const SDL_KeyboardEvent& event);
-    void handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event);
+    void handleKeyDownEvent(const SDL_KeyboardEvent& event) const;
+    void handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event) const;
 
-    bool isActionPressed(Action action);
+    bool isActionPressed(Action action) const;
     Subscription onActionPressed(std::function<void(Action action)> callback);
     void offActionPressed(Subscription subscription);
 
@@ -120,8 +120,8 @@ class InputBus {
   private:
     // --- Utility Action Queires
 
-    bool isKeyboardKeyDownActionPressed(Action action);
-    bool isMouseButtonDownActionPressed(Action action);
+    bool isKeyboardKeyDownActionPressed(Action action) const;
+    bool isMouseButtonDownActionPressed(Action action) const;
 
     // --- Action Maps
 

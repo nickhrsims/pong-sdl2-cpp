@@ -72,7 +72,7 @@ InputBus& InputBus::get() {
 // Raw Event Handling
 // -----------------------------------------------------------------------------
 
-void InputBus::handleKeyDownEvent(const SDL_KeyboardEvent& event) {
+void InputBus::handleKeyDownEvent(const SDL_KeyboardEvent& event) const {
     SDL_Scancode scancode{event.keysym.scancode};
     Action action{scancodeToActionMap[scancode]};
 
@@ -86,7 +86,7 @@ void InputBus::handleKeyDownEvent(const SDL_KeyboardEvent& event) {
     }
 }
 
-void InputBus::handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event) {
+void InputBus::handleMouseButtonDownEvent(const SDL_MouseButtonEvent& event) const {
     uint8_t button{event.button};
     Action action{buttonToActionMap[button]};
 
@@ -131,8 +131,8 @@ void InputBus::Config::setMouseButtonDownAction(uint8_t button, Action action) {
 // Action Queries
 // -----------------------------------------------------------------------------
 
-bool InputBus::isActionPressed(Action action) {
-    switch (actionToInputTypeMap[action]) {
+bool InputBus::isActionPressed(Action action) const {
+    switch (actionToInputTypeMap.at(action)) {
     case InputType::keyboard:
         return isKeyboardKeyDownActionPressed(action);
     case InputType::mouse:
@@ -142,14 +142,14 @@ bool InputBus::isActionPressed(Action action) {
     }
 }
 
-bool InputBus::isKeyboardKeyDownActionPressed(Action action) {
-    SDL_Scancode scancode{actionToScancodeMap[action]};
+bool InputBus::isKeyboardKeyDownActionPressed(Action action) const {
+    SDL_Scancode scancode{actionToScancodeMap.at(action)};
     const uint8_t* keyboardState = SDL_GetKeyboardState(NULL);
     return keyboardState[scancode];
 }
 
-bool InputBus::isMouseButtonDownActionPressed(Action action) {
-    uint8_t button{actionToMouseButtonMap[action]};
+bool InputBus::isMouseButtonDownActionPressed(Action action) const {
+    uint8_t button{actionToMouseButtonMap.at(action)};
     const uint32_t mouseState = SDL_GetMouseState(NULL, NULL);
     return SDL_BUTTON(button) & mouseState;
 }
