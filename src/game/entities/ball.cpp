@@ -1,11 +1,30 @@
 #include "ball.h"
 
-Ball::Ball() : renderComponent{this} { setSize(8, 8); }
+#include "core/color.h"
+#include "core/renderer.h"
 
+// -----------------------------------------------------------------------------
+// Constructor
+// -----------------------------------------------------------------------------
+Ball::Ball() { setSize(8, 8); }
+
+// -----------------------------------------------------------------------------
+// Static Function Components
+// -----------------------------------------------------------------------------
+static void renderWhiteRect(Rect const& rect) {
+    static auto const& renderer{Renderer::get()};
+    renderer.drawRect(rect, Color::white());
+}
+
+// -----------------------------------------------------------------------------
+// Entity Overrides
+// -----------------------------------------------------------------------------
 void Ball::update(float delta) { move(delta); }
+void Ball::draw() const { renderWhiteRect(getRect()); }
 
-void Ball::draw() const { renderComponent.draw(); }
-
+// -----------------------------------------------------------------------------
+// Member Functions
+// -----------------------------------------------------------------------------
 void Ball::randomizeVelocity() {
     double degrees = 80 * ((double)rand() / (double)RAND_MAX - 0.5) +
                      (10 * ((double)rand() / (double)RAND_MAX));
