@@ -67,6 +67,7 @@ Game::Game(const App::Config& config)
         config.setKeyboardKeyDownAction(SDL_SCANCODE_RETURN, InputBus::Action::confirm);
         config.setKeyboardKeyDownAction(SDL_SCANCODE_BACKSPACE,
                                         InputBus::Action::cancel);
+        config.setKeyboardKeyDownAction(SDL_SCANCODE_P, InputBus::Action::pause);
         config.setKeyboardKeyDownAction(SDL_SCANCODE_Q, InputBus::Action::quit);
 
         input.initialize(config);
@@ -232,7 +233,14 @@ Game::Game(const App::Config& config)
     };
 
     // --- Pause
-    pauseState.processFrame = [](const float delta) { (void)delta; };
+    pauseState.processFrame = [this](const float delta) {
+        static auto const& renderer{Renderer::get()};
+        static FadingText pauseText{font, "PAUSED", field.getCenter()};
+        pauseText.update(delta); // drive animation
+        renderer.clear();
+        pauseText.draw();
+        renderer.show();
+    };
 
     // --- Game Over
     gameOverState.enter        = []() {};
