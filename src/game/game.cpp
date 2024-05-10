@@ -227,6 +227,10 @@ Game::Game(const App::Config& config)
         pauseText.update(delta); // drive animation
         renderer.clear();
         pauseText.draw();
+        leftPaddle.draw();
+        rightPaddle.draw();
+        leftScore.draw();
+        rightScore.draw();
         renderer.show();
     };
 
