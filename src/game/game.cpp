@@ -129,17 +129,11 @@ Game::Game(const App::Config& config)
 
     // --- Start
     startState.processFrame = [this](const float delta) {
+        static auto const& renderer{Renderer::get()};
         static FadingText pressStartText{font, "PRESS START", field.getCenter()};
-
-        // --- Update
-        pressStartText.update(delta);
-
-        // --- Rendering
-        static const Renderer& renderer{Renderer::get()};
+        pressStartText.update(delta); // drive animation
         renderer.clear();
-
         pressStartText.draw();
-
         renderer.show();
     };
 
