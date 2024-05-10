@@ -175,23 +175,12 @@ Game::Game(const App::Config& config)
 
         // --- Rendering
         renderer.clear();
-
         // Draw paddles for "visual effect"
         leftPaddle.draw();
         rightPaddle.draw();
         leftScore.draw();
         rightScore.draw();
         countdown.draw();
-
-        // NOTE: fix it so the ball doesn't render just before this.
-
-        //        draw_scores(app->video);
-        //      draw_entities(app->video, 2, (entity_t* [2]){&left_paddle,
-        //      &right_paddle});
-        //    draw_dimmer(app->video);
-        //  video_draw_text_with_color(app->video, map[counter], field.x + (field.w
-        //  / 2),
-        //                           field.y + (field.h / 2), 255, 255, 255, 240);
         renderer.show();
     };
 
