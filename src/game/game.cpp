@@ -4,7 +4,9 @@
 
 #include "SDL_scancode.h"
 
+#include "core/color.h"
 #include "game.h"
+#include "game/entities/countdown.h"
 #include "game/entities/main_menu.h"
 #include "game/entities/paddle.h"
 
@@ -196,59 +198,29 @@ Game::Game(const App::Config& config)
         spdlog::debug("Leaving {} state", countdownState.tag);
     };
     countdownState.processFrame = [this](const float delta) {
-        // --- Ignore unused delta
-        (void)delta;
         // --- Renderer
         static const Renderer& renderer{Renderer::get()};
-        // --- State Actors
-        // Static
-        static bool isActive                = false;
-        static unsigned long long prevTicks = 0;
-        static unsigned long long currTicks = 0;
-        static char counter                 = 0;
-        static std::vector<Texture*> textures{{
-            &stringTextures.at(StringKey::go),
-            &numberTextures.at(1),
-            &numberTextures.at(2),
-            &numberTextures.at(3),
-        }};
-        // Local
-        Vector2 fieldCenter{field.getCenter()};
-        // --- Auxiliary Functors
-        static auto setup = []() {
-            isActive  = true;
-            prevTicks = SDL_GetTicks64();
-            counter   = 3;
-        };
-        static auto teardown = [this]() {
-            isActive = false;
-            next();
-        };
-        static auto isTimerHit = []() { return currTicks - prevTicks >= 600; };
-        static auto onTimerHit = []() {
-            --counter;
-            prevTicks = currTicks;
+
+        static auto const createNumberTexture = [this](int number) -> Texture {
+            return renderer.loadTexture(font, std::to_string(number), Color::white());
         };
 
-        // --- Animation Update
-        currTicks = SDL_GetTicks64();
+        static auto const createStringTexture =
+            [this](char const* const text) -> Texture {
+            return renderer.loadTexture(font, text, Color::white());
+        };
 
-        // --- If just starting (again), do setup
-        if (!isActive) {
-            setup();
-        }
+        static Countdown countdown{
+            3,
+            600,
+            {std::make_shared<Texture>(createStringTexture("GO!")),
+             std::make_shared<Texture>(createNumberTexture(1)),
+             std::make_shared<Texture>(createNumberTexture(2)),
+             std::make_shared<Texture>(createNumberTexture(3))},
+            [this]() { next(); },
+            field.getCenter()};
 
-        // --- If delay timer interval hit
-        if (isTimerHit()) {
-            // If counter is done, teardown and end
-            if (counter == 0) {
-                teardown();
-                return;
-            }
-
-            // Handle normal timer-hit operator
-            onTimerHit();
-        }
+        countdown.update(delta);
 
         // --- Rendering
         renderer.clear();
@@ -258,9 +230,9 @@ Game::Game(const App::Config& config)
         rightPaddle.draw();
         leftScore.draw();
         rightScore.draw();
+        countdown.draw();
 
         // NOTE: fix it so the ball doesn't render just before this.
-        renderer.drawTexture(*textures[counter], fieldCenter.x, fieldCenter.y);
 
         //        draw_scores(app->video);
         //      draw_entities(app->video, 2, (entity_t* [2]){&left_paddle,
