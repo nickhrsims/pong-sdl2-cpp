@@ -30,33 +30,6 @@ Game::Game(const App::Config& config)
       rightScore{{.font = font, .max = Game::maxScore}}, mainMenu{{.font = font}} {
 
     // ---------------------------------
-    // Strings & Textures
-    // ---------------------------------
-    {
-        using Key = StringKey;
-
-        const SDL_Color white{255, 255, 255, 255};
-
-        const Renderer& renderer{Renderer::get()};
-
-        // Initialize Strings
-        stringValues[Key::startGame] = "PRESS START";
-        stringValues[Key::gameOver]  = "GAME OVER";
-        stringValues[Key::go]        = "GO!";
-
-        // Initialize String Text-Textures
-        for (auto const& [key, text] : stringValues) {
-            stringTextures.try_emplace(key, renderer.loadTexture(font, text, white));
-        }
-
-        // Initialize Number Text-Textures
-        for (int n = 0; n < 10; ++n) {
-            numberTextures.push_back(
-                renderer.loadTexture(font, std::to_string(n), white));
-        }
-    }
-
-    // ---------------------------------
     // Entities
     // ---------------------------------
     {
