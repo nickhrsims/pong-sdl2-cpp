@@ -9,32 +9,22 @@
 #include "game/input_bus.h"
 
 // TODO: Tests
-class MainMenu : public Entity {
+class FadingText : public Entity {
   public:
     // --- Types
     using Action = InputBus::Action;
-    typedef std::function<void()> Callback;
-
-    struct Params {
-        const Font& font;
-        Callback onConfirm{nullptr};
-    };
 
     // --- Destructor / Constructors / Operators
-    ~MainMenu();
-    MainMenu(const Params);
+    FadingText(const Font& font, const std::string& text, Vector2 position);
 
-    MainMenu(const MainMenu&)            = delete;
-    MainMenu(MainMenu&&)                 = delete;
-    MainMenu& operator=(const MainMenu&) = delete;
-    MainMenu& operator=(MainMenu&&)      = delete;
+    FadingText(const FadingText&)            = delete;
+    FadingText(FadingText&&)                 = delete;
+    FadingText& operator=(const FadingText&) = delete;
+    FadingText& operator=(FadingText&&)      = delete;
 
     // --- Entity Overrides
     void update(float delta) override;
     void draw() const override;
-
-    // --- Callback Injector
-    void onConfirm(Callback callback);
 
   private:
     // --- Types
@@ -46,8 +36,6 @@ class MainMenu : public Entity {
 
     // --- Data Members
     Texture texture;
-    Callback handleConfirm;
-    InputBus::Subscription actionSubscription;
 
     AnimationData anim;
 };

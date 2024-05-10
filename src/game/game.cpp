@@ -7,7 +7,7 @@
 #include "core/color.h"
 #include "game.h"
 #include "game/entities/countdown.h"
-#include "game/entities/main_menu.h"
+#include "game/entities/fading_text.h"
 #include "game/entities/paddle.h"
 
 // -----------------------------------------------------------------------------
@@ -25,7 +25,7 @@ Game::Game(const App::Config& config)
       leftPaddle{Player::one}, rightPaddle{Player::two}, ball{},
       currentState{&startState}, font{"res/font.ttf", 16},
       leftScore{{.font = font, .max = Game::maxScore}},
-      rightScore{{.font = font, .max = Game::maxScore}}, mainMenu{{.font = font}} {
+      rightScore{{.font = font, .max = Game::maxScore}} {
 
     // ---------------------------------
     // Entities
@@ -48,11 +48,6 @@ Game::Game(const App::Config& config)
         // Right Score
         rightScore.setPosition(fieldCenter.x + (field.w / ratio.x), field.h / ratio.y);
 
-        // --- Main Menu
-        // Set position to center field
-        mainMenu.setPosition(fieldCenter.x, fieldCenter.y);
-        // Wire MainMenu confirm handler to Game confirm handler.
-        mainMenu.onConfirm([this]() { confirm(); });
     }
 
     // ---------------------------------
@@ -134,14 +129,16 @@ Game::Game(const App::Config& config)
 
     // --- Start
     startState.processFrame = [this](const float delta) {
+        static FadingText pressStartText{font, "PRESS START", field.getCenter()};
+
         // --- Update
-        mainMenu.update(delta);
+        pressStartText.update(delta);
 
         // --- Rendering
         static const Renderer& renderer{Renderer::get()};
         renderer.clear();
 
-        mainMenu.draw();
+        pressStartText.draw();
 
         renderer.show();
     };

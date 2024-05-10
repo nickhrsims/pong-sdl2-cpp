@@ -5,7 +5,7 @@
 
 #include "core/app.h"
 #include "game/entities/ball.h"
-#include "game/entities/main_menu.h"
+#include "game/entities/fading_text.h"
 #include "game/entities/paddle.h"
 #include "game/entities/score.h"
 #include "game/input_bus.h"
@@ -60,7 +60,6 @@ class Game : public App {
     Font font;
     Score leftScore;
     Score rightScore;
-    MainMenu mainMenu;
 
     // --- Static Members
     static const Score::ValueType maxScore{6};

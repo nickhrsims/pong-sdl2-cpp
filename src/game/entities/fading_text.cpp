@@ -1,4 +1,4 @@
-#include "main_menu.h"
+#include "fading_text.h"
 
 #include "core/color.h"
 #include "core/renderer.h"
@@ -8,33 +8,16 @@
 // Destructor / Constructors / Operators
 // -----------------------------------------------------------------------------
 
-MainMenu::~MainMenu() {
-    InputBus& input{InputBus::get()};
-    input.offActionPressed(actionSubscription);
-}
-
-MainMenu::MainMenu(const Params params)
-    : texture{Renderer::get().loadTexture(params.font, "PRESS START", Color::white())},
-      handleConfirm{params.onConfirm} {
-
-    InputBus& input{InputBus::get()};
-
-    actionSubscription = input.onActionPressed([this](Action action) {
-        switch (action) {
-        case Action::confirm:
-            handleConfirm();
-            break;
-        default:
-            break;
-        }
-    });
+FadingText::FadingText(const Font& font, const std::string& text, Vector2 position)
+    : texture{Renderer::get().loadTexture(font, text, Color::white())} {
+    setPosition(position.x, position.y);
 }
 
 // -----------------------------------------------------------------------------
 // Entity Overrides
 // -----------------------------------------------------------------------------
 
-void MainMenu::update(float delta) {
+void FadingText::update(float delta) {
     // --- Animation Update
     // Bounce Effect
     if (anim.alpha <= 60) {
@@ -47,14 +30,8 @@ void MainMenu::update(float delta) {
     texture.setAlpha(anim.alpha);
 }
 
-void MainMenu::draw() const {
+void FadingText::draw() const {
     static const Renderer& renderer{Renderer::get()};
     Vector2 pos{getPosition()};
     renderer.drawTexture(texture, pos.x, pos.y);
 }
-
-// -----------------------------------------------------------------------------
-// Callback Injector
-// -----------------------------------------------------------------------------
-
-void MainMenu::onConfirm(Callback callback) { handleConfirm = callback; }
