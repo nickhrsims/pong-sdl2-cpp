@@ -10,8 +10,6 @@
 #include "game/entities/main_menu.h"
 #include "game/entities/paddle.h"
 
-// NOTE: A little bit of pointer chasing is OK for a game this small
-
 // -----------------------------------------------------------------------------
 // Constructor / Destructor
 // -----------------------------------------------------------------------------
