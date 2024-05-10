@@ -313,7 +313,11 @@ void Game::processEvent(const SDL_Event& event) {
 // -----------------------------------------------------------------------------
 
 // TODO: Generalize Event Bus
-void Game::scheduleTransition(State* target) { transitionQueue.push(target); }
+void Game::scheduleTransition(State* target) {
+    if (target) {
+        transitionQueue.push(target);
+    }
+}
 
 void Game::handleTransition(State* target) {
     // If `target` is defined (a transition exists for the proved event)
