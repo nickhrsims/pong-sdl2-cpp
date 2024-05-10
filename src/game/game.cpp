@@ -47,7 +47,6 @@ Game::Game(const App::Config& config)
 
         // Right Score
         rightScore.setPosition(fieldCenter.x + (field.w / ratio.x), field.h / ratio.y);
-
     }
 
     // ---------------------------------
@@ -243,9 +242,19 @@ Game::Game(const App::Config& config)
     };
 
     // --- Game Over
-    gameOverState.enter        = []() {};
-    gameOverState.exit         = []() {};
-    gameOverState.processFrame = [](const float delta) { (void)delta; };
+    gameOverState.processFrame = [this](const float delta) {
+        static auto const& renderer{Renderer::get()};
+        static FadingText gameOverText{font, "GAME OVER",
+                                       field.getCenter() - Vector2{0, 16}};
+        static FadingText resetText{font, "Press START to play again",
+                                    field.getCenter() + Vector2{0, 16}};
+        gameOverText.update(delta); // drive animation
+        resetText.update(delta);
+        renderer.clear();
+        gameOverText.draw();
+        resetText.draw();
+        renderer.show();
+    };
 
     // --- Shut Down
     shutdownState.enter        = [this]() { stop(); };
@@ -408,10 +417,18 @@ void Game::resolveFrameCollisions() {
 
 void Game::handleLeftGoal() {
     leftScore.increment();
-    next();
+    if (leftScore.isAtMax()) {
+        gameOver();
+    } else {
+        next();
+    }
 }
 
 void Game::handleRightGoal() {
     rightScore.increment();
-    next();
+    if (rightScore.isAtMax()) {
+        gameOver();
+    } else {
+        next();
+    }
 }
