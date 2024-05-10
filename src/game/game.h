@@ -22,7 +22,6 @@ class Game : public App {
         const std::string tag;
 
         std::function<void(const float)> processFrame;
-        std::function<void(const SDL_Event&)> processEvent;
 
         std::function<void()> enter;
         std::function<void()> exit;
@@ -51,15 +50,8 @@ class Game : public App {
     void processEvent(const SDL_Event& event) override;
 
   private:
-    // --- Types
-    /**
-     * Symbolic reference support for associating game-specific
-     * strings and textures.
-     */
-    enum class StringKey { startGame, gameOver, go };
-    std::queue<State*> transitionQueue;
-
     // --- Data Members
+    std::queue<State*> transitionQueue;
     Rect field;
     Paddle leftPaddle;
     Paddle rightPaddle;
@@ -72,11 +64,6 @@ class Game : public App {
 
     // --- Static Members
     static const Score::ValueType maxScore{6};
-
-    // --- Texture Lookup Tables
-    std::unordered_map<StringKey, std::string> stringValues;
-    std::unordered_map<StringKey, Texture> stringTextures;
-    std::vector<Texture> numberTextures;
 
     // --- Rules (Collision, Goal, Score, etc.)
     void handleLeftGoal();

@@ -135,8 +135,6 @@ Game::Game(const App::Config& config)
     // ---------------------------------
 
     // --- Start
-    startState.enter = []() {}; // always unused
-    startState.exit  = [this]() { spdlog::debug("Leaving {} state", startState.tag); };
     startState.processFrame = [this](const float delta) {
         // --- Update
         mainMenu.update(delta);
@@ -149,7 +147,6 @@ Game::Game(const App::Config& config)
 
         renderer.show();
     };
-    startState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Reset
     resetState.enter = [this]() {
@@ -157,19 +154,11 @@ Game::Game(const App::Config& config)
         rightScore.reset();
         next();
     };
-    resetState.exit         = []() {};
     resetState.processFrame = [](const float delta) { (void)delta; };
-    resetState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Countdown
     // TODO: Move to Countdown entity
 
-    countdownState.enter = [this]() {
-        spdlog::debug("Entering {} state", countdownState.tag);
-    };
-    countdownState.exit = [this]() {
-        spdlog::debug("Leaving {} state", countdownState.tag);
-    };
     countdownState.processFrame = [this](const float delta) {
         // --- Renderer
         static const Renderer& renderer{Renderer::get()};
@@ -216,25 +205,17 @@ Game::Game(const App::Config& config)
         //                           field.y + (field.h / 2), 255, 255, 255, 240);
         renderer.show();
     };
-    countdownState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Field Setup
     fieldSetupState.enter = [this]() {
-        spdlog::debug("Entered {} state", fieldSetupState.tag);
         Vector2 fieldCenter{field.getCenter()};
         ball.setPosition(fieldCenter.x, fieldCenter.y);
         ball.randomizeVelocity();
         next();
     };
-    fieldSetupState.exit = [this]() {
-        spdlog::debug("Leaving {} state", fieldSetupState.tag);
-    };
     fieldSetupState.processFrame = [](const float delta) { (void)delta; };
-    fieldSetupState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Playing
-    playingState.enter        = []() {};
-    playingState.exit         = []() {};
     playingState.processFrame = [this](const float delta) {
         static const Renderer& render{Renderer::get()};
 
@@ -260,25 +241,19 @@ Game::Game(const App::Config& config)
 
         render.show();
     };
-    playingState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Pause
-    pauseState.enter        = []() {};
-    pauseState.exit         = []() {};
     pauseState.processFrame = [](const float delta) { (void)delta; };
-    pauseState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Game Over
     gameOverState.enter        = []() {};
     gameOverState.exit         = []() {};
     gameOverState.processFrame = [](const float delta) { (void)delta; };
-    gameOverState.processEvent = [](const SDL_Event& event) { (void)event; };
 
     // --- Shut Down
     shutdownState.enter        = [this]() { stop(); };
     shutdownState.exit         = []() {};
     shutdownState.processFrame = [](const float delta) { (void)delta; };
-    shutdownState.processEvent = [](const SDL_Event& event) { (void)event; };
 
 // ---------------------------------
 // State Member Assertions (debug)
@@ -295,13 +270,12 @@ Game::Game(const App::Config& config)
     bool error = false;
 
     for (State* state : debugStateAssertionChecklist) {
-        if ((error |= !state->processFrame)) {
+        bool frameproc_error{false};
+        if ((frameproc_error = !state->processFrame)) {
             spdlog::error("{} state does not define a frame processor!", state->tag);
         }
 
-        if ((error |= !state->processEvent)) {
-            spdlog::error("{} state does not define an event processor!", state->tag);
-        }
+        error |= frameproc_error;
     }
 
     if (error) {
